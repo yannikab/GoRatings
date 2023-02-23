@@ -1,4 +1,4 @@
-﻿namespace GoRatings.Contracts;
+﻿namespace GoRatings.Api.Contracts.Ratings;
 
 public class RatingResponse
 {
