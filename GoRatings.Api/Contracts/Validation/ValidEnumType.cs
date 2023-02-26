@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using GoRatings.Api.Models;
-
 namespace GoRatings.Api.Contracts.Validation;
 
 public class ValidEnumType : ValidationAttribute

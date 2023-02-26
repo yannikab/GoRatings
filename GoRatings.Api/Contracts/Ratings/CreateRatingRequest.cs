@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using GoRatings.Api.Contracts.Validation;
-using GoRatings.Api.Models;
+using GoRatings.Services.RatingPersister.Models;
 
 namespace GoRatings.Api.Contracts.Ratings;
 
@@ -12,12 +12,12 @@ public class CreateRatingRequest
 
     [Required]
     [ValidEnumType(typeof(EntityType))]
-    public string EntityType { get; set; } = string.Empty;
+    public string EntityType { get; set; } = null!;
     
     public Guid? RaterUid { get; set; }
     
     [Required]
     [FiveStarRating]
-    [RegularExpression(".{0,4}", ErrorMessage = $"The textual representation of {nameof(GivenRating)} can not be longer than 4 characters.")]
-    public decimal GivenRating { get; set; }
+    [RegularExpression(".{0,3}", ErrorMessage = $"The textual representation of {nameof(Rating)} can not be longer than 3 characters.")]
+    public decimal Rating { get; set; }
 }

@@ -7,11 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="GoRatings.Api.config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="GoRatings.Api.config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GoRatings.DataAccess\GoRatings.DataAccess.csproj" />
+    <ProjectReference Include="..\GoRatings.Services\GoRatings.Services.csproj" />
   </ItemGroup>
 
 </Project>
