@@ -1,4 +1,5 @@
-﻿using GoRatings.Services.RatingCalculation.Interfaces;
+﻿using GoRatings.Services.RatingCalculation.Exceptions;
+using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingCalculation.Models;
 
 namespace GoRatings.Services.RatingCalculation.Service;
@@ -14,9 +15,16 @@ public class RatingCalculationService : IRatingCalculationService
 
 		foreach (var cr in consideredRatings)
 		{
-			count++;
+			try
+            {
+                rating += cr.CalculateRating(utcNow, pastDays);
+            }
+            catch (RatingCalculationException)
+            {
+				continue;
+            }
 
-			rating += cr.CalculateRating(utcNow, pastDays);
+			count++;
 		}
 
 		if (count > 0)

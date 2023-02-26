@@ -42,11 +42,11 @@ public class RatingsController : ControllerBase
             return BadRequest(sb.ToString());
         }
 
-        IGivenRating gr = request.ToGivenRating();
+        IGivenRating givenRating = request.ToGivenRating();
 
         try
         {
-            persisterService.Add(gr);
+            persisterService.Add(givenRating);
         }
         catch (Exception ex) when (ex is EntityDoesNotExistException || ex is EntityInvalidException || ex is EntityUidTypeMismatchException)
         {
@@ -61,7 +61,7 @@ public class RatingsController : ControllerBase
             return StatusCode(500);
         }
 
-        return CreatedAtAction(nameof(GetRating), new { entityUid = gr.EntityUid }, gr);
+        return CreatedAtAction(nameof(GetRating), new { entityUid = givenRating.EntityUid }, givenRating);
     }
 
     [HttpGet("{entityUid:guid}")]

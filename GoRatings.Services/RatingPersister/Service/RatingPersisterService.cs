@@ -5,7 +5,7 @@ using GoRatings.Services.RatingPersister.Interfaces;
 
 namespace GoRatings.Services.RatingPersister.Service;
 
-public class RatingPersister : IRatingPersisterService
+public class RatingPersisterService : IRatingPersisterService
 {
     public void Add(IGivenRating givenRating)
     {
@@ -35,7 +35,7 @@ public class RatingPersister : IRatingPersisterService
 
         var ratings = uow.Ratings.FindWithinTimeWindow(entityUid, DateTime.UtcNow, pastDays);
 
-        return ratings.Select(r => r.ToStoredRatingModel()).ToList();
+        return ratings.Select(r => r.ToStoredRating()).ToList();
     }
 
     public async Task AddAsync(IGivenRating givenRating)
@@ -63,6 +63,6 @@ public class RatingPersister : IRatingPersisterService
 
         var ratings = await uow.Ratings.FindWithinTimeWindowAsync(entityUid, DateTime.UtcNow, pastDays);
 
-        return ratings.Select(r => r.ToStoredRatingModel());
+        return ratings.Select(r => r.ToStoredRating());
     }
 }

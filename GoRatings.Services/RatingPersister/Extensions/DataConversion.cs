@@ -7,41 +7,41 @@ namespace GoRatings.Services.RatingPersister;
 
 public static partial class Extensions
 {
-	public static Rating ToRating(this IGivenRating gr, Entity e)
+	public static Rating ToRating(this IGivenRating givenRating, Entity entity)
 	{
 		return new Rating()
 		{
-			EntityId = e.Id,
-			Rater = gr.RaterUid,
-			Value = gr.Rating,
+			EntityId = entity.Id,
+			Rater = givenRating.RaterUid,
+			Value = givenRating.Rating,
 			CreatedDt = DateTime.UtcNow,
 			IsActive = true,
 		};
 	}
 
-	public static IStoredRating ToStoredRatingModel(this Rating r)
+	public static IStoredRating ToStoredRating(this Rating rating)
 	{
 		return new StoredRating()
 		{
-			EntityUid = r.Entity.Uid,
-			EntityType = r.Entity.GetEntityType(),
-			RaterUid = r.Rater,
-			Rating = r.Value,
-			CreatedDt = r.CreatedDt,
+			EntityUid = rating.Entity.Uid,
+			EntityType = rating.Entity.GetEntityType(),
+			RaterUid = rating.Rater,
+			Rating = rating.Value,
+			CreatedDt = rating.CreatedDt,
 		};
 	}
 
-	public static EntityType GetEntityType(this Entity e)
+	public static EntityType GetEntityType(this Entity entity)
 	{
-		if (e.PropertyId.HasValue && e.RealEstateAgentId.HasValue)
-			throw new EntityInvalidException(e.Uid);
+		if (entity.PropertyId.HasValue && entity.RealEstateAgentId.HasValue)
+			throw new EntityInvalidException(entity.Uid);
 
-		if (e.PropertyId.HasValue)
+		if (entity.PropertyId.HasValue)
 			return EntityType.Property;
 
-		if (e.RealEstateAgentId.HasValue)
+		if (entity.RealEstateAgentId.HasValue)
 			return EntityType.RealEstateAgent;
 
-		throw new EntityInvalidException(e.Uid);
+		throw new EntityInvalidException(entity.Uid);
 	}
 }

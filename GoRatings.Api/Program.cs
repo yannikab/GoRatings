@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IRatingPersisterService, RatingPersister>();
+builder.Services.AddScoped<IRatingPersisterService, RatingPersisterService>();
 builder.Services.AddScoped<IRatingCalculationService, RatingCalculationService>();
 builder.Services.AddSingleton<ICachingService<Guid, OverallRatingResponse>, MemoryCachingService<Guid, OverallRatingResponse>>();
 builder.Services.AddHostedService<OldRatingsCleanupService>();

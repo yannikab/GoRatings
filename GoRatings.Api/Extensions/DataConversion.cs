@@ -19,13 +19,13 @@ public static partial class Extensions
 		};
 	}
 
-	public static ConsideredRating ToConsideredRating(this IStoredRating storedRatingModel)
+	public static ConsideredRating ToConsideredRating(this IStoredRating storedRating)
 	{
 		return new ConsideredRating()
 		{
-			Rating = storedRatingModel.Rating,
-			CreatedDT = storedRatingModel.CreatedDt,
-			IsAnonymous = !storedRatingModel.RaterUid.HasValue,
+			Rating = storedRating.Rating,
+			CreatedDT = storedRating.CreatedDt,
+			IsAnonymous = !storedRating.RaterUid.HasValue,
 		};
 	}
 
