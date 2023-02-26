@@ -16,13 +16,13 @@ public class RepositoryEntity : Repository<GoRatingsContext, Entity, long>, IRep
     {
     }
 
-	public Entity GetByUid(Guid entityUid)
-	{
-		return Find(eb => eb.Uid == entityUid).FirstOrDefault() ?? Entity.None;
-	}
+    public Entity GetByUid(Guid entityUid)
+    {
+        return Find(eb => eb.Uid == entityUid).FirstOrDefault() ?? Entity.None;
+    }
 
-	public async Task<Entity> GetByUidAsync(Guid entityUid)
-	{
-		return (await FindAsync(eb => eb.Uid == entityUid)).FirstOrDefault() ?? Entity.None;
-	}
+    public async Task<Entity> GetByUidAsync(Guid entityUid)
+    {
+        return (await FindAsync(eb => eb.Uid == entityUid)).FirstOrDefault() ?? Entity.None;
+    }
 }

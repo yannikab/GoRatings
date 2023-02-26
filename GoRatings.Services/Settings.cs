@@ -11,10 +11,14 @@ namespace GoRatings.Services;
 internal class Settings
 {
     private readonly int cacheExpirationMinutes;
-    private readonly int cacheExpirationScanFrequency;
-
+    private readonly int cacheExpirationScanFrequencyMinutes;
     public int CacheExpirationMinutes { get { return cacheExpirationMinutes; } }
-    public int CacheExpirationScanFrequency { get { return cacheExpirationScanFrequency; } }
+    public int CacheExpirationScanFrequencyMinutes { get { return cacheExpirationScanFrequencyMinutes; } }
+
+    private readonly int ratingsCleanupAgeDays;
+    private readonly int ratingsCleanupIntervalMinutes;
+    public int RatingsCleanupAgeDays { get { return ratingsCleanupAgeDays; } }
+    public int RatingsCleanupIntervalMinutes { get { return ratingsCleanupIntervalMinutes; } }
 
     private static readonly Settings instance = new();
 
@@ -33,7 +37,13 @@ internal class Settings
         if (!int.TryParse(configuration["cacheExpirationMinutes"], out cacheExpirationMinutes))
             cacheExpirationMinutes = 60;
 
-        if (!int.TryParse(configuration["cacheExpirationScanFrequency"], out cacheExpirationScanFrequency))
-            cacheExpirationScanFrequency = 5;
+        if (!int.TryParse(configuration["cacheExpirationScanFrequencyMinutes"], out cacheExpirationScanFrequencyMinutes))
+            cacheExpirationScanFrequencyMinutes = 10;
+
+        if (!int.TryParse(configuration["ratingsCleanupAgeDays"], out ratingsCleanupAgeDays))
+            ratingsCleanupAgeDays = 100;
+
+        if (!int.TryParse(configuration["ratingsCleanupIntervalMinutes"], out ratingsCleanupIntervalMinutes))
+            ratingsCleanupIntervalMinutes = 60;
     }
 }

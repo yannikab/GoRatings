@@ -13,40 +13,54 @@ namespace GoRatings.DataAccess.Repository;
 
 public class RepositoryRating : Repository<GoRatingsContext, Rating, long>, IRepositoryRating
 {
-	public RepositoryRating(GoRatingsContext dbc)
-		: base(dbc)
-	{
-	}
+    public RepositoryRating(GoRatingsContext dbc)
+        : base(dbc)
+    {
+    }
 
-	private IQueryable<Rating> All
-	{
-		get { return dbc.Set<Rating>().Include(r => r.Entity); }
-	}
+    private IQueryable<Rating> All
+    {
+        get { return dbc.Set<Rating>().Include(r => r.Entity); }
+    }
 
-	private IQueryable<Rating> Active
-	{
-		get { return All.Where(r => r.IsActive); }
-	}
+    private IQueryable<Rating> Active
+    {
+        get { return All.Where(r => r.IsActive); }
+    }
 
-	public IEnumerable<Rating> FindWithinPastDays(Guid entityUid, int pastDays)
-	{
-		DateTime utcNow = DateTime.UtcNow;
+    public IEnumerable<Rating> FindWithinTimeWindow(Guid entityUid, DateTime referenceDT, int windowDays)
+    {
+        return Active.Where(
+            r => r.Entity.Uid == entityUid &&
+            r.CreatedDt < referenceDT &&
+            EF.Functions.DateDiffDay(r.CreatedDt, referenceDT) < windowDays
+        );
+    }
 
-		return Active.Where(
-			r => r.Entity.Uid == entityUid &&
-			r.CreatedDt < utcNow &&
-			EF.Functions.DateDiffDay(r.CreatedDt, utcNow) < pastDays
-		);
-	}
+    public async Task<IEnumerable<Rating>> FindWithinTimeWindowAsync(Guid entityUid, DateTime referenceDT, int windowDays)
+    {
+        return await Active.Where(
+            r => r.Entity.Uid == entityUid &&
+            r.CreatedDt < referenceDT &&
+            EF.Functions.DateDiffDay(r.CreatedDt, referenceDT) < windowDays
+        ).ToListAsync();
+    }
 
-	public async Task<IEnumerable<Rating>> FindWithinPastDaysAsync(Guid entityUid, int pastDays)
-	{
-		DateTime utcNow = DateTime.UtcNow;
+    public IEnumerable<Rating> FindOlderThanTimeWindow(DateTime referenceDT, int windowDays)
+    {
+        return All.Where(
+            r =>
+            r.CreatedDt < referenceDT &&
+            EF.Functions.DateDiffDay(r.CreatedDt, referenceDT) < windowDays == false
+        );
+    }
 
-		return await Active.Where(
-			r => r.Entity.Uid == entityUid &&
-			r.CreatedDt < utcNow &&
-			EF.Functions.DateDiffDay(r.CreatedDt, utcNow) < pastDays
-		).ToListAsync();
-	}
+    public async Task<IEnumerable<Rating>> FindOlderThanTimeWindowAsync(DateTime referenceDT, int windowDays)
+    {
+        return await All.Where(
+            r =>
+            r.CreatedDt < referenceDT &&
+            EF.Functions.DateDiffDay(r.CreatedDt, referenceDT) < windowDays == false
+        ).ToListAsync();
+    }
 }

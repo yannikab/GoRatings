@@ -19,7 +19,7 @@ public class MemoryCachingService<K, V> : ICachingService<K, V>
     {
         memoryCache = new MemoryCache(new MemoryCacheOptions()
         {
-            ExpirationScanFrequency = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationScanFrequency)
+            ExpirationScanFrequency = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationScanFrequencyMinutes)
         });
 
         memoryCacheEntryOptions = new MemoryCacheEntryOptions()

@@ -10,6 +10,6 @@ namespace GoRatings.DataAccess.Repository;
 
 public interface IRepositoryEntity : IRepository<GoRatingsContext, Entity, long>
 {
-	Entity GetByUid(Guid entityUid);
-	Task<Entity> GetByUidAsync(Guid entityUid);
+    Entity GetByUid(Guid entityUid);
+    Task<Entity> GetByUidAsync(Guid entityUid);
 }

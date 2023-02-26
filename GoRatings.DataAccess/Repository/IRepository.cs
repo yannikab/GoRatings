@@ -25,7 +25,7 @@ public interface IRepository<D, E, K> where D : DbContext where E : class
     public Task<E> GetAsync(K id);
     public Task<IEnumerable<E>> GetAllAsync();
     public Task<IEnumerable<E>> FindAsync(Expression<Func<E, bool>> predicate);
-    
+
     public Task AddAsync(E entity);
     public Task AddRangeAsync(IEnumerable<E> entities);
 }
