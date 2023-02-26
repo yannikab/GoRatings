@@ -12,6 +12,6 @@ public partial class Rating
 
     public override string ToString()
     {
-        return $"{GetType().Name}: {{{nameof(Id)}: {Id}, {nameof(EntityId)}: '{EntityId}', {nameof(GivenRating)}: '{GivenRating}'}}";
+        return $"{GetType().Name}: {{{nameof(Id)}: {Id}, {nameof(EntityId)}: '{EntityId}', {nameof(Value)}: '{Value}'}}";
     }
 }

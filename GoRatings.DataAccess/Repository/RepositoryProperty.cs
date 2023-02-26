@@ -20,7 +20,7 @@ public class RepositoryProperty : Repository<GoRatingsContext, Property, long>, 
 
     private IQueryable<Property> All
     {
-        get { return dbc.Set<Property>().Include(p => p.EntityBase); }
+        get { return dbc.Set<Property>().Include(p => p.Entity); }
     }
 
     public override Property Get(long id)

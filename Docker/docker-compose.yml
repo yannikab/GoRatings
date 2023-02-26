@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  mssql:
+
+    image: mcr.microsoft.com/mssql/server
+
+    container_name: mssql-go-ratings
+
+    ports:
+      - "1433:1433" # "host:container"
+
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "G0R4t1ngs12!"
+      MSSQL_PID: "Developer"
+
+    volumes:
+      - ./GoRatings.bak:/var/opt/mssql/GoRatings.bak
+
+    command: >
+      bash -c " echo 'MSSQL START' && /opt/mssql/bin/sqlservr &
+                echo 'SLEEP 30 (DB RESTORE)' && sleep 30s &&
+                echo 'DB RESTORE' && /opt/mssql-tools/bin/sqlcmd -U sa -P G0R4t1ngs12! -Q 'RESTORE DATABASE GoRatings FROM DISK = \"/var/opt/mssql/GoRatings.bak\" WITH REPLACE, MOVE \"GoRatings\" TO \"/var/opt/mssql/data/GoRatings.mdf\", MOVE \"GoRatings_log\" TO \"/var/opt/mssql/data/GoRatings_log.ldf\"' &&
+                echo 'SLEEP INFINITY' && sleep infinity";

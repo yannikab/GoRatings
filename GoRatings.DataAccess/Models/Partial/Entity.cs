@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GoRatings.DataAccess.Models;
 
-public partial class EntityBase
+public partial class Entity
 {
-    public static EntityBase None { get; } = new();
+    public static Entity None { get; } = new();
 
     public override string ToString()
     {

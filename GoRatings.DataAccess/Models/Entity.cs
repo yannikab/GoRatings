@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace GoRatings.DataAccess.Models;
 
-public partial class EntityBase
+public partial class Entity
 {
-    public EntityBase()
+    public Entity()
     {
         Ratings = new HashSet<Rating>();
     }

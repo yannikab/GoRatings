@@ -14,5 +14,5 @@ public partial class Property
     public int YearBuilt { get; set; }
     public decimal ListingPrice { get; set; }
 
-    public virtual EntityBase? EntityBase { get; set; }
+    public virtual Entity? Entity { get; set; }
 }

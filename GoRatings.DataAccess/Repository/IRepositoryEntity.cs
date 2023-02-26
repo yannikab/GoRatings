@@ -8,6 +8,8 @@ using GoRatings.DataAccess.Models;
 
 namespace GoRatings.DataAccess.Repository;
 
-public interface IRepositoryEntityBase : IRepository<GoRatingsContext, EntityBase, long>
+public interface IRepositoryEntity : IRepository<GoRatingsContext, Entity, long>
 {
+	Entity GetByUid(Guid entityUid);
+	Task<Entity> GetByUidAsync(Guid entityUid);
 }

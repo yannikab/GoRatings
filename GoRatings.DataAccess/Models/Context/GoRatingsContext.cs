@@ -16,7 +16,7 @@ public partial class GoRatingsContext : DbContext
     {
     }
 
-    public virtual DbSet<EntityBase> EntityBases { get; set; } = null!;
+    public virtual DbSet<Entity> Entities { get; set; } = null!;
     public virtual DbSet<Property> Properties { get; set; } = null!;
     public virtual DbSet<Rating> Ratings { get; set; } = null!;
     public virtual DbSet<RealEstateAgent> RealEstateAgents { get; set; } = null!;
@@ -31,15 +31,19 @@ public partial class GoRatingsContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<EntityBase>(entity =>
+        modelBuilder.Entity<Entity>(entity =>
         {
-            entity.ToTable("EntityBase");
+            entity.ToTable("Entity");
 
-            entity.HasIndex(e => e.PropertyId, "IX_EntityBase_Unique_PropertyId")
-                .IsUnique();
+            entity.HasIndex(e => e.Uid, "IX_Entity_Uid");
 
-            entity.HasIndex(e => e.RealEstateAgentId, "IX_EntityBase_Unique_RealEstateAgentId")
-                .IsUnique();
+            entity.HasIndex(e => e.PropertyId, "IX_Entity_Unique_PropertyId")
+                .IsUnique()
+                .HasFilter("([PropertyId] IS NOT NULL)");
+
+            entity.HasIndex(e => e.RealEstateAgentId, "IX_Entity_Unique_RealEstateAgentId")
+                .IsUnique()
+                .HasFilter("([RealEstateAgentId] IS NOT NULL)");
 
             entity.Property(e => e.Code).HasMaxLength(50);
 
@@ -50,14 +54,14 @@ public partial class GoRatingsContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(4000);
 
             entity.HasOne(d => d.Property)
-                .WithOne(p => p.EntityBase)
-                .HasForeignKey<EntityBase>(d => d.PropertyId)
-                .HasConstraintName("FK_EntityBase_Property");
+                .WithOne(p => p.Entity)
+                .HasForeignKey<Entity>(d => d.PropertyId)
+                .HasConstraintName("FK_Entity_Property");
 
             entity.HasOne(d => d.RealEstateAgent)
-                .WithOne(p => p.EntityBase)
-                .HasForeignKey<EntityBase>(d => d.RealEstateAgentId)
-                .HasConstraintName("FK_EntityBase_RealEstateAgent");
+                .WithOne(p => p.Entity)
+                .HasForeignKey<Entity>(d => d.RealEstateAgentId)
+                .HasConstraintName("FK_Entity_RealEstateAgent");
         });
 
         modelBuilder.Entity<Property>(entity =>
@@ -83,13 +87,13 @@ public partial class GoRatingsContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("CreatedDT");
 
-            entity.Property(e => e.GivenRating).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Value).HasColumnType("decimal(18, 0)");
 
             entity.HasOne(d => d.Entity)
                 .WithMany(p => p.Ratings)
                 .HasForeignKey(d => d.EntityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Rating_EntityBase");
+                .HasConstraintName("FK_Rating_Entity");
         });
 
         modelBuilder.Entity<RealEstateAgent>(entity =>

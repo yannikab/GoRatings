@@ -11,7 +11,7 @@ namespace GoRatings.DataAccess.UnitOfWork;
 
 public interface IGoRatingsUnitOfWork : IDisposable
 {
-    IRepositoryEntityBase EntityBases { get; }
+    IRepositoryEntity Entities { get; }
     IRepositoryProperty Properties { get; }
     IRepositoryRealEstateAgent RealEstateAgents { get; }
     IRepositoryRating Ratings { get; }

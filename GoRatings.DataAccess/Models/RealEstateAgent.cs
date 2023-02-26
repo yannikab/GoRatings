@@ -13,5 +13,5 @@ public partial class RealEstateAgent
     public string LicenseNumber { get; set; } = null!;
     public string? BrokerageFirm { get; set; }
 
-    public virtual EntityBase? EntityBase { get; set; }
+    public virtual Entity? Entity { get; set; }
 }

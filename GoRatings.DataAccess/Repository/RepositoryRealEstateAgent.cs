@@ -20,7 +20,7 @@ public class RepositoryRealEstateAgent : Repository<GoRatingsContext, RealEstate
 
     private IQueryable<RealEstateAgent> All
     {
-        get { return dbc.Set<RealEstateAgent>().Include(p => p.EntityBase); }
+        get { return dbc.Set<RealEstateAgent>().Include(p => p.Entity); }
     }
 
     public override RealEstateAgent Get(long id)

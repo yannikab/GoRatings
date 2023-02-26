@@ -10,4 +10,6 @@ namespace GoRatings.DataAccess.Repository;
 
 public interface IRepositoryRating : IRepository<GoRatingsContext, Rating, long>
 {
+	IEnumerable<Rating> FindWithinPastDays(Guid entityUid, int pastDays);
+	Task<IEnumerable<Rating>> FindWithinPastDaysAsync(Guid entityUid, int pastDays);
 }

@@ -18,13 +18,13 @@ public class GoRatingsUnitOfWork : IGoRatingsUnitOfWork
     {
         this.dbc = new GoRatingsContext();
 
-        EntityBases = new RepositoryEntityBase(dbc);
+        Entities = new RepositoryEntity(dbc);
         Properties = new RepositoryProperty(dbc);
         RealEstateAgents = new RepositoryRealEstateAgent(dbc);
         Ratings = new RepositoryRating(dbc);
     }
 
-    public IRepositoryEntityBase EntityBases { get; }
+    public IRepositoryEntity Entities { get; }
     public IRepositoryProperty Properties { get; }
     public IRepositoryRealEstateAgent RealEstateAgents { get; }
     public IRepositoryRating Ratings { get; }
