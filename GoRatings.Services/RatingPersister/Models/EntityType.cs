@@ -1,4 +1,4 @@
-﻿namespace GoRatings.Api.Models;
+﻿namespace GoRatings.Services.RatingPersister.Models;
 
 public enum EntityType
 {

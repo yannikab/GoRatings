@@ -1,0 +1,4 @@
+{
+  "cacheExpirationMinutes": 60,
+  "cacheExpirationScanFrequency": 10
+}
