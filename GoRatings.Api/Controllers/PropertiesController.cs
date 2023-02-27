@@ -1,6 +1,7 @@
 ﻿using GoRatings.Api.Contracts.Properties;
-using GoRatings.Services.PropertyPersister.Exceptions;
-using GoRatings.Services.PropertyPersister.Interfaces;
+using GoRatings.Services.Exceptions.Property;
+using GoRatings.Services.Interfaces.Property;
+using GoRatings.Services.Interfaces.Services;
 
 using Microsoft.AspNetCore.Mvc;
 

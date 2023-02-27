@@ -1,15 +1,11 @@
 using GoRatings.Api.Contracts.Ratings;
-using GoRatings.Services.Caching.Interfaces;
-using GoRatings.Services.Caching.Service;
-using GoRatings.Services.OldRatingsCleanup.Service;
-using GoRatings.Services.PropertyPersister.Interfaces;
-using GoRatings.Services.PropertyPersister.Service;
-using GoRatings.Services.RatingCalculation.Interfaces;
-using GoRatings.Services.RatingCalculation.Service;
-using GoRatings.Services.RatingPersister.Interfaces;
-using GoRatings.Services.RatingPersister.Service;
-using GoRatings.Services.RealEstateAgentPersister.Interfaces;
-using GoRatings.Services.RealEstateAgentPersister.Service;
+using GoRatings.Services.Caching;
+using GoRatings.Services.Interfaces.Services;
+using GoRatings.Services.OldRatingsCleanup;
+using GoRatings.Services.PropertyPersister;
+using GoRatings.Services.RatingCalculation;
+using GoRatings.Services.RatingPersister;
+using GoRatings.Services.RealEstateAgentPersister;
 
 var builder = WebApplication.CreateBuilder(args);
 

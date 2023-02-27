@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Contracts.Properties;
-using GoRatings.Services.PropertyPersister.Interfaces;
-using GoRatings.Services.PropertyPersister.Models;
+using GoRatings.Services.Interfaces.Property;
+using GoRatings.Services.Models.Property;
 
 namespace GoRatings.Api;
 

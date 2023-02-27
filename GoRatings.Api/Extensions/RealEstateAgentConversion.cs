@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Contracts.RealEstateAgents;
-using GoRatings.Services.RealEstateAgentPersister.Interfaces;
-using GoRatings.Services.RealEstateAgentPersister.Models;
+using GoRatings.Services.Interfaces.RealEstateAgent;
+using GoRatings.Services.Models.RealEstateAgent;
 
 namespace GoRatings.Api;
 

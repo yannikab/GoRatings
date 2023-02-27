@@ -1,8 +1,7 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
-using GoRatings.Services.Caching.Interfaces;
-using GoRatings.Services.RatingCalculation.Interfaces;
-using GoRatings.Services.RatingPersister.Exceptions;
-using GoRatings.Services.RatingPersister.Interfaces;
+using GoRatings.Services.Exceptions.Entity;
+using GoRatings.Services.Interfaces.Rating;
+using GoRatings.Services.Interfaces.Services;
 
 using Microsoft.AspNetCore.Mvc;
 

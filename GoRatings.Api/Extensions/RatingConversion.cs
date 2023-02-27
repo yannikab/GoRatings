@@ -1,8 +1,7 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
-using GoRatings.Services.RatingCalculation.Interfaces;
-using GoRatings.Services.RatingCalculation.Models;
-using GoRatings.Services.RatingPersister.Interfaces;
-using GoRatings.Services.RatingPersister.Models;
+using GoRatings.Services.Interfaces.Rating;
+using GoRatings.Services.Models.Entity;
+using GoRatings.Services.Models.Rating;
 
 namespace GoRatings.Api;
 
