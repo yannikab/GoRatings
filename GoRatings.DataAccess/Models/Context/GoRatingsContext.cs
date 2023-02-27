@@ -87,7 +87,7 @@ public partial class GoRatingsContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("CreatedDT");
 
-            entity.Property(e => e.Value).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Value).HasColumnType("decimal(3, 2)");
 
             entity.HasOne(d => d.Entity)
                 .WithMany(p => p.Ratings)

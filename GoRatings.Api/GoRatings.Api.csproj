@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GoRatings.Services\GoRatings.Services.csproj" />
+    <ProjectReference Include="..\GoRatings.DataAccess\GoRatings.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

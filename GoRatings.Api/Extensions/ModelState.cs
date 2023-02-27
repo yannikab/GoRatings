@@ -6,16 +6,16 @@ namespace GoRatings.Api;
 
 public static partial class Extensions
 {
-	public static string GetErrors(this ModelStateDictionary modelState)
-	{
-		if (modelState.IsValid)
-			return string.Empty;
+    public static string GetErrors(this ModelStateDictionary modelState)
+    {
+        if (modelState.IsValid)
+            return string.Empty;
 
-		var sb = new StringBuilder();
+        var sb = new StringBuilder();
 
-		foreach (ModelStateEntry mse in modelState.Values.Where(mse => mse != null))
-			sb.AppendLine(string.Join(", ", mse.Errors.Select(e => e.ErrorMessage)));
+        foreach (ModelStateEntry mse in modelState.Values.Where(mse => mse != null))
+            sb.AppendLine(string.Join(", ", mse.Errors.Select(e => e.ErrorMessage)));
 
-		return sb.ToString();
-	}
+        return sb.ToString();
+    }
 }

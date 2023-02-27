@@ -1,3 +1,9 @@
 {
-  "pastDays": 100
+  "pastDays": 100,
+
+  "cacheExpirationMinutes": 60,
+  "cacheExpirationScanFrequencyMinutes": 10,
+
+  "ratingsCleanupAgeDays": 100,
+  "ratingsCleanupIntervalMinutes": 60
 }

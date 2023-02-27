@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.Api", "GoRatings.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.DataAccess", "GoRatings.DataAccess\GoRatings.DataAccess.csproj", "{40FA3599-F854-4381-BF88-5D47C0019343}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.Services", "GoRatings.Services\GoRatings.Services.csproj", "{CDFB81B2-C5CE-42B8-904C-154F431A2C0D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{40FA3599-F854-4381-BF88-5D47C0019343}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40FA3599-F854-4381-BF88-5D47C0019343}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40FA3599-F854-4381-BF88-5D47C0019343}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDFB81B2-C5CE-42B8-904C-154F431A2C0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDFB81B2-C5CE-42B8-904C-154F431A2C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDFB81B2-C5CE-42B8-904C-154F431A2C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDFB81B2-C5CE-42B8-904C-154F431A2C0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

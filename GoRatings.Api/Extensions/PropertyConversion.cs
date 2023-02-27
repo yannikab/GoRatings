@@ -1,12 +1,13 @@
 ﻿using GoRatings.Api.Contracts.Properties;
-using GoRatings.Services.Interfaces.Property;
-using GoRatings.Services.Models.Property;
+using GoRatings.Api.Interfaces.Property;
+using GoRatings.Api.Models.Property;
+using GoRatings.DataAccess.Models;
 
 namespace GoRatings.Api;
 
 public static partial class Extensions
 {
-    public static GivenProperty ToGivenProperty(this CreatePropertyRequest request)
+    public static IGivenProperty ToGivenProperty(this CreatePropertyRequest request)
     {
         return new GivenProperty()
         {
@@ -38,6 +39,49 @@ public static partial class Extensions
             SquareFootage = storedProperty.SquareFootage,
             YearBuilt = storedProperty.YearBuilt,
             ListingPrice = storedProperty.ListingPrice,
+        };
+    }
+
+    public static Property ToProperty(this IGivenProperty givenProperty)
+    {
+        return new Property()
+        {
+            Address = givenProperty.Address,
+            City = givenProperty.City,
+            State = givenProperty.State,
+            ZipCode = givenProperty.ZipCode,
+            SquareFootage = givenProperty.SquareFootage,
+            YearBuilt = givenProperty.YearBuilt,
+            ListingPrice = givenProperty.ListingPrice,
+            Entity = new Entity()
+            {
+                Uid = Guid.NewGuid(),
+                Code = givenProperty.Code,
+                Description = givenProperty.Description,
+                CreatedDt = DateTime.UtcNow,
+                IsActive = true,
+            },
+        };
+    }
+
+    public static IStoredProperty ToStoredProperty(this Property property)
+    {
+        Entity entity = property.Entity!;
+
+        return new StoredProperty()
+        {
+            EntityUid = entity.Uid,
+            CreatedDT = entity.CreatedDt,
+            IsActive = entity.IsActive,
+            Code = entity.Code,
+            Description = entity.Description,
+            Address = property.Address,
+            City = property.City,
+            State = property.State,
+            ZipCode = property.ZipCode,
+            SquareFootage = property.SquareFootage,
+            YearBuilt = property.YearBuilt,
+            ListingPrice = property.ListingPrice,
         };
     }
 }

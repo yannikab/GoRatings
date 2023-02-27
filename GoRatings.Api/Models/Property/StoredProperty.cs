@@ -1,37 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GoRatings.Api.Interfaces.Property;
 
-namespace GoRatings.Api.Contracts.Properties;
+namespace GoRatings.Api.Models.Property;
 
-public class CreatePropertyRequest
+public class StoredProperty : IStoredProperty
 {
-    [Required]
-    [MaxLength(30)]
+    public Guid EntityUid { get; set; }
+    public DateTime CreatedDT { get; set; }
+    public bool IsActive { get; set; }
     public string Code { get; set; } = null!;
-
-    [Required]
-    [MaxLength(2500)]
     public string Description { get; set; } = null!;
-
-    [Required]
-    [MaxLength(120)]
     public string Address { get; set; } = null!;
-
-    [Required]
-    [MaxLength(80)]
     public string City { get; set; } = null!;
-
-    [MaxLength(80)]
     public string? State { get; set; }
-
-    [MaxLength(15)]
     public string? ZipCode { get; set; }
-
-    [Required]
     public short SquareFootage { get; set; }
-
-    [Required]
     public int YearBuilt { get; set; }
-
-    [Required]
     public decimal ListingPrice { get; set; }
 }
