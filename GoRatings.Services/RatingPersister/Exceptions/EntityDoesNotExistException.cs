@@ -11,6 +11,6 @@ public class EntityDoesNotExistException : ApplicationException
 
 	public override string Message
 	{
-		get { return $"Entity with unique id {entityUid} not found."; }
+		get { return $"Entity with unique id {entityUid} does not exist."; }
 	}
 }

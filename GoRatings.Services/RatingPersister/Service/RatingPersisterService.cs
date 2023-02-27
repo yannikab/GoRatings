@@ -7,7 +7,7 @@ namespace GoRatings.Services.RatingPersister.Service;
 
 public class RatingPersisterService : IRatingPersisterService
 {
-    public void Add(IGivenRating givenRating)
+    public IStoredRating Add(IGivenRating givenRating)
     {
         using var uow = new GoRatingsUnitOfWork();
 
@@ -19,9 +19,13 @@ public class RatingPersisterService : IRatingPersisterService
         if (entity.GetEntityType() != givenRating.EntityType)
             throw new EntityUidTypeMismatchException(givenRating.EntityUid, givenRating.EntityType);
 
-        uow.Ratings.Add(givenRating.ToRating(entity));
+        var rating = givenRating.ToRating(entity);
+
+        uow.Ratings.Add(rating);
 
         uow.Complete();
+
+        return rating.ToStoredRating();
     }
 
     public IEnumerable<IStoredRating> GetWithinPastDays(Guid entityUid, int pastDays)
@@ -38,7 +42,7 @@ public class RatingPersisterService : IRatingPersisterService
         return ratings.Select(r => r.ToStoredRating()).ToList();
     }
 
-    public async Task AddAsync(IGivenRating givenRating)
+    public async Task<IStoredRating> AddAsync(IGivenRating givenRating)
     {
         using var uow = new GoRatingsUnitOfWork();
 
@@ -47,9 +51,13 @@ public class RatingPersisterService : IRatingPersisterService
         if (entity == Entity.None)
             throw new EntityDoesNotExistException(givenRating.EntityUid);
 
-        await uow.Ratings.AddAsync(givenRating.ToRating(entity));
+        var rating = givenRating.ToRating(entity);
+
+        await uow.Ratings.AddAsync(rating);
 
         uow.Complete();
+
+        return rating.ToStoredRating();
     }
 
     public async Task<IEnumerable<IStoredRating>> GetWithinPastDaysAsync(Guid entityUid, int pastDays)

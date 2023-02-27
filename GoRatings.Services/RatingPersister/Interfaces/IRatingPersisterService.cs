@@ -2,9 +2,9 @@
 
 public interface IRatingPersisterService
 {
-	void Add(IGivenRating givenRating);
+	IStoredRating Add(IGivenRating givenRating);
 	IEnumerable<IStoredRating> GetWithinPastDays(Guid entityUid, int pastDays);
 
-	Task AddAsync(IGivenRating givenRating);
+	Task<IStoredRating> AddAsync(IGivenRating givenRating);
 	Task<IEnumerable<IStoredRating>> GetWithinPastDaysAsync(Guid entityUid, int pastDays);
 }

@@ -2,10 +2,14 @@ using GoRatings.Api.Contracts.Ratings;
 using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.Caching.Service;
 using GoRatings.Services.OldRatingsCleanup.Service;
+using GoRatings.Services.PropertyPersister.Interfaces;
+using GoRatings.Services.PropertyPersister.Service;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingCalculation.Service;
 using GoRatings.Services.RatingPersister.Interfaces;
 using GoRatings.Services.RatingPersister.Service;
+using GoRatings.Services.RealEstateAgentPersister.Interfaces;
+using GoRatings.Services.RealEstateAgentPersister.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +21,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRatingPersisterService, RatingPersisterService>();
-builder.Services.AddScoped<IRatingCalculationService, RatingCalculationService>();
+builder.Services.AddScoped<IPropertyPersisterService, PropertyPersisterService>();
+builder.Services.AddScoped<IRealEstateAgentPersisterService, RealEstateAgentPersisterService>();
+
+builder.Services.AddSingleton<IRatingCalculationService, RatingCalculationService>();
 builder.Services.AddSingleton<ICachingService<Guid, OverallRatingResponse>, MemoryCachingService<Guid, OverallRatingResponse>>();
 builder.Services.AddHostedService<OldRatingsCleanupService>();
 

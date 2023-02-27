@@ -29,7 +29,7 @@ public static partial class Extensions
 		};
 	}
 
-	public static OverallRatingResponse ToOveralRatingResponse(this IOverallRating overallRating, Guid entityUid)
+	public static OverallRatingResponse ToOverallRatingResponse(this IOverallRating overallRating, Guid entityUid)
 	{
 		return new OverallRatingResponse()
 		{

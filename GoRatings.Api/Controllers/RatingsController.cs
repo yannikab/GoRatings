@@ -1,18 +1,16 @@
-﻿using System.Text;
-
-using GoRatings.Api.Contracts.Ratings;
+﻿using GoRatings.Api.Contracts.Ratings;
 using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingPersister.Exceptions;
 using GoRatings.Services.RatingPersister.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GoRatings.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")]
 public class RatingsController : ControllerBase
 {
     private readonly IRatingPersisterService persisterService;
@@ -30,23 +28,21 @@ public class RatingsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult CreateRating([FromBody] CreateRatingRequest request)
     {
         if (!ModelState.IsValid)
-        {
-            var sb = new StringBuilder();
-
-            foreach (ModelStateEntry mse in ModelState.Values.Where(mse => mse != null))
-                sb.AppendLine(string.Join(", ", mse.Errors.Select(e => e.ErrorMessage)));
-
-            return BadRequest(sb.ToString());
-        }
+            return BadRequest(ModelState.GetErrors());
 
         IGivenRating givenRating = request.ToGivenRating();
 
         try
         {
-            persisterService.Add(givenRating);
+            var storedRating = persisterService.Add(givenRating);
+
+            return CreatedAtAction(nameof(GetRating), new { entityUid = storedRating.EntityUid }, storedRating);
         }
         catch (Exception ex) when (ex is EntityDoesNotExistException || ex is EntityInvalidException || ex is EntityUidTypeMismatchException)
         {
@@ -60,11 +56,13 @@ public class RatingsController : ControllerBase
 
             return StatusCode(500);
         }
-
-        return CreatedAtAction(nameof(GetRating), new { entityUid = givenRating.EntityUid }, givenRating);
     }
 
     [HttpGet("{entityUid:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult GetRating(Guid entityUid)
     {
         try
@@ -81,7 +79,7 @@ public class RatingsController : ControllerBase
             if (!(overallRating.ConsideredRatings > 0))
                 return NotFound(entityUid);
 
-            var overallRatingResponse = overallRating.ToOveralRatingResponse(entityUid);
+            var overallRatingResponse = overallRating.ToOverallRatingResponse(entityUid);
 
             cachingService.Add(entityUid, overallRatingResponse);
 
