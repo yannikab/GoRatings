@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Exceptions.Property;
 using GoRatings.Api.Interfaces.Property;
-using GoRatings.Api.Interfaces.Services;
+using GoRatings.Api.Interfaces.Services.PropertyPersister;
 using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.UnitOfWork;
 

@@ -1,6 +1,7 @@
 ﻿using GoRatings.Api.Exceptions.Entity;
+using GoRatings.Api.Exceptions.Rating;
 using GoRatings.Api.Interfaces.Rating;
-using GoRatings.Api.Interfaces.Services;
+using GoRatings.Api.Interfaces.Services.RatingPersister;
 using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.UnitOfWork;
 
@@ -10,6 +11,9 @@ public class RatingPersisterService : IRatingPersisterService
 {
     public IStoredRating Add(IGivenRating givenRating)
     {
+        if (!givenRating.IsValid())
+            throw new RatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
+
         using var uow = new GoRatingsUnitOfWork();
 
         var entity = uow.Entities.GetByUid(givenRating.EntityUid);
@@ -26,7 +30,12 @@ public class RatingPersisterService : IRatingPersisterService
 
         uow.Complete();
 
-        return rating.ToStoredRating();
+        var storedRating = rating.ToStoredRating();
+
+        if (!storedRating.IsValid())
+            throw new RatingValueInvalidException(storedRating.EntityUid, storedRating.Rating);
+
+        return storedRating;
     }
 
     public IEnumerable<IStoredRating> GetWithinPastDays(Guid entityUid, int pastDays)
@@ -38,13 +47,25 @@ public class RatingPersisterService : IRatingPersisterService
         if (entity == Entity.None)
             throw new EntityDoesNotExistException(entityUid);
 
+        if (!entity.IsActive)
+            return Enumerable.Empty<IStoredRating>();
+
         var ratings = uow.Ratings.FindWithinTimeWindow(entityUid, DateTime.UtcNow, pastDays);
 
-        return ratings.Select(r => r.ToStoredRating()).ToList();
+        var storedRatings = ratings.Select(r => r.ToStoredRating()).ToList();
+
+        foreach (var sr in storedRatings)
+            if (!sr.IsValid())
+                throw new RatingValueInvalidException(sr.EntityUid, sr.Rating);
+
+        return storedRatings;
     }
 
     public async Task<IStoredRating> AddAsync(IGivenRating givenRating)
     {
+        if (!givenRating.IsValid())
+            throw new RatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
+
         using var uow = new GoRatingsUnitOfWork();
 
         var entity = await uow.Entities.GetByUidAsync(givenRating.EntityUid);
@@ -58,7 +79,12 @@ public class RatingPersisterService : IRatingPersisterService
 
         uow.Complete();
 
-        return rating.ToStoredRating();
+        var storedRating = rating.ToStoredRating();
+
+        if (!storedRating.IsValid())
+            throw new RatingValueInvalidException(storedRating.EntityUid, storedRating.Rating);
+
+        return storedRating;
     }
 
     public async Task<IEnumerable<IStoredRating>> GetWithinPastDaysAsync(Guid entityUid, int pastDays)
@@ -70,8 +96,17 @@ public class RatingPersisterService : IRatingPersisterService
         if (entity == Entity.None)
             throw new EntityDoesNotExistException(entityUid);
 
+        if (!entity.IsActive)
+            return Enumerable.Empty<IStoredRating>();
+
         var ratings = await uow.Ratings.FindWithinTimeWindowAsync(entityUid, DateTime.UtcNow, pastDays);
 
-        return ratings.Select(r => r.ToStoredRating());
+        var storedRatings = ratings.Select(r => r.ToStoredRating()).ToList();
+
+        foreach (var sr in storedRatings)
+            if (!sr.IsValid())
+                throw new RatingValueInvalidException(sr.EntityUid, sr.Rating);
+
+        return storedRatings;
     }
 }

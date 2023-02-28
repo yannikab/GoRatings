@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Exceptions.RealEstateAgent;
 using GoRatings.Api.Interfaces.RealEstateAgent;
-using GoRatings.Api.Interfaces.Services;
+using GoRatings.Api.Interfaces.Services.RealEstateAgentPersister;
 using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.UnitOfWork;
 

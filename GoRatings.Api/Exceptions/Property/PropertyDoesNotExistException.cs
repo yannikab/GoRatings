@@ -1,6 +1,6 @@
 ﻿namespace GoRatings.Api.Exceptions.Property;
 
-public class PropertyDoesNotExistException : ApplicationException
+public class PropertyDoesNotExistException : Exception
 {
     private readonly Guid entityUid;
 

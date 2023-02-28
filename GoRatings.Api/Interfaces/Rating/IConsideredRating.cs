@@ -5,5 +5,6 @@ public interface IConsideredRating
     decimal Rating { get; set; }
     DateTime CreatedDT { get; set; }
     bool IsAnonymous { get; set; }
-    decimal CalculateRating(DateTime referenceDT, int windowDays);
+    void Validate();
+    decimal EffectiveRating(DateTime referenceDT, int windowDays);
 }

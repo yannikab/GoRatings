@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Interfaces.Property;
 
-namespace GoRatings.Api.Interfaces.Services;
+namespace GoRatings.Api.Interfaces.Services.PropertyPersister;
 
 public interface IPropertyPersisterService
 {

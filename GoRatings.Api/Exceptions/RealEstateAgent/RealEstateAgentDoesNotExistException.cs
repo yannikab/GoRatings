@@ -1,6 +1,6 @@
 ﻿namespace GoRatings.Api.Exceptions.RealEstateAgent;
 
-public class RealEstateAgentDoesNotExistException : ApplicationException
+public class RealEstateAgentDoesNotExistException : Exception
 {
     private readonly Guid entityUid;
 

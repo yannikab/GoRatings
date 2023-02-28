@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Interfaces.RealEstateAgent;
 
-namespace GoRatings.Api.Interfaces.Services;
+namespace GoRatings.Api.Interfaces.Services.RealEstateAgentPersister;
 
 public interface IRealEstateAgentPersisterService
 {

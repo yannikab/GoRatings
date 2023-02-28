@@ -20,8 +20,10 @@ internal class Settings
 
     private readonly int ratingsCleanupAgeDays;
     private readonly int ratingsCleanupIntervalMinutes;
+    private readonly int ratingsCleanupStartupDelayMinutes;
     public int RatingsCleanupAgeDays { get { return ratingsCleanupAgeDays; } }
     public int RatingsCleanupIntervalMinutes { get { return ratingsCleanupIntervalMinutes; } }
+    public int RatingsCleanupStartupDelayMinutes { get { return ratingsCleanupStartupDelayMinutes; } }
 
     private static readonly Settings instance = new();
 
@@ -51,5 +53,8 @@ internal class Settings
 
         if (!int.TryParse(configuration["ratingsCleanupIntervalMinutes"], out ratingsCleanupIntervalMinutes))
             ratingsCleanupIntervalMinutes = 60;
+
+        if (!int.TryParse(configuration["ratingsCleanupStartupDelayMinutes"], out ratingsCleanupStartupDelayMinutes))
+            ratingsCleanupStartupDelayMinutes = 15;
     }
 }

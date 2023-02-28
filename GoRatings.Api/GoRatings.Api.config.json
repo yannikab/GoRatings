@@ -5,5 +5,6 @@
   "cacheExpirationScanFrequencyMinutes": 10,
 
   "ratingsCleanupAgeDays": 100,
-  "ratingsCleanupIntervalMinutes": 60
+  "ratingsCleanupIntervalMinutes": 60,
+  "ratingsCleanupStartupDelayMinutes": 15
 }

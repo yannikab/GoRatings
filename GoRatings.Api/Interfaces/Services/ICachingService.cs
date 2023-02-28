@@ -1,4 +1,4 @@
-﻿namespace GoRatings.Api.Interfaces.Services;
+﻿namespace GoRatings.Api.Interfaces.Services.Caching;
 
 public interface ICachingService<K, V>
 {

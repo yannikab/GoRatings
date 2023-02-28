@@ -1,6 +1,6 @@
 ﻿using GoRatings.Api.Interfaces.Rating;
 
-namespace GoRatings.Api.Interfaces.Services;
+namespace GoRatings.Api.Interfaces.Services.RatingPersister;
 
 public interface IRatingPersisterService
 {

@@ -2,7 +2,7 @@
 
 namespace GoRatings.Api.Exceptions.Entity;
 
-public class EntityUidTypeMismatchException : ApplicationException
+public class EntityUidTypeMismatchException : Exception
 {
     private readonly Guid entityUid;
     private readonly EntityType entityType;

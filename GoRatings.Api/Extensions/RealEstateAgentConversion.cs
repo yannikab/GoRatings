@@ -22,24 +22,6 @@ public static partial class Extensions
         };
     }
 
-    public static GetRealEstateAgentResponse ToRealEstateAgentResponse(this IStoredRealEstateAgent storedRealEstateAgent)
-    {
-        return new GetRealEstateAgentResponse()
-        {
-            EntityUid = storedRealEstateAgent.EntityUid,
-            CreatedDT = storedRealEstateAgent.CreatedDT,
-            IsActive = storedRealEstateAgent.IsActive,
-            Code = storedRealEstateAgent.Code,
-            Description = storedRealEstateAgent.Description,
-            FirstName = storedRealEstateAgent.FirstName,
-            LastName = storedRealEstateAgent.LastName,
-            Email = storedRealEstateAgent.Email,
-            Phone = storedRealEstateAgent.Phone,
-            LicenseNumber = storedRealEstateAgent.LicenseNumber,
-            BrokerageFirm = storedRealEstateAgent.BrokerageFirm,
-        };
-    }
-
     public static RealEstateAgent ToRealEstateAgent(this IGivenRealEstateAgent givenRealEstateAgent)
     {
         return new RealEstateAgent()
@@ -79,5 +61,28 @@ public static partial class Extensions
             LicenseNumber = realEstateAgent.LicenseNumber,
             BrokerageFirm = realEstateAgent.BrokerageFirm,
         };
+    }
+
+    public static CreateRealEstateAgentResponse ToCreateRealEstateAgentResponse(this IStoredRealEstateAgent storedRealEstateAgent)
+    {
+        return new CreateRealEstateAgentResponse()
+        {
+            EntityUid = storedRealEstateAgent.EntityUid,
+            CreatedDT = storedRealEstateAgent.CreatedDT,
+            IsActive = storedRealEstateAgent.IsActive,
+            Code = storedRealEstateAgent.Code,
+            Description = storedRealEstateAgent.Description,
+            FirstName = storedRealEstateAgent.FirstName,
+            LastName = storedRealEstateAgent.LastName,
+            Email = storedRealEstateAgent.Email,
+            Phone = storedRealEstateAgent.Phone,
+            LicenseNumber = storedRealEstateAgent.LicenseNumber,
+            BrokerageFirm = storedRealEstateAgent.BrokerageFirm,
+        };
+    }
+
+    public static GetRealEstateAgentResponse ToGetRealEstateAgentResponse(this IStoredRealEstateAgent storedRealEstateAgent)
+    {
+        return storedRealEstateAgent.ToCreateRealEstateAgentResponse();
     }
 }

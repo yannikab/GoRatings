@@ -23,25 +23,6 @@ public static partial class Extensions
         };
     }
 
-    public static GetPropertyResponse ToPropertyResponse(this IStoredProperty storedProperty)
-    {
-        return new GetPropertyResponse()
-        {
-            EntityUid = storedProperty.EntityUid,
-            CreatedDT = storedProperty.CreatedDT,
-            IsActive = storedProperty.IsActive,
-            Code = storedProperty.Code,
-            Description = storedProperty.Description,
-            Address = storedProperty.Address,
-            City = storedProperty.City,
-            State = storedProperty.State,
-            ZipCode = storedProperty.ZipCode,
-            SquareFootage = storedProperty.SquareFootage,
-            YearBuilt = storedProperty.YearBuilt,
-            ListingPrice = storedProperty.ListingPrice,
-        };
-    }
-
     public static Property ToProperty(this IGivenProperty givenProperty)
     {
         return new Property()
@@ -83,5 +64,29 @@ public static partial class Extensions
             YearBuilt = property.YearBuilt,
             ListingPrice = property.ListingPrice,
         };
+    }
+
+    public static CreatePropertyResponse ToCreatePropertyResponse(this IStoredProperty storedProperty)
+    {
+        return new CreatePropertyResponse()
+        {
+            EntityUid = storedProperty.EntityUid,
+            CreatedDT = storedProperty.CreatedDT,
+            IsActive = storedProperty.IsActive,
+            Code = storedProperty.Code,
+            Description = storedProperty.Description,
+            Address = storedProperty.Address,
+            City = storedProperty.City,
+            State = storedProperty.State,
+            ZipCode = storedProperty.ZipCode,
+            SquareFootage = storedProperty.SquareFootage,
+            YearBuilt = storedProperty.YearBuilt,
+            ListingPrice = storedProperty.ListingPrice,
+        };
+    }
+
+    public static GetPropertyResponse ToGetPropertyResponse(this IStoredProperty storedProperty)
+    {
+        return storedProperty.ToCreatePropertyResponse();
     }
 }

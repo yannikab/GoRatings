@@ -65,6 +65,18 @@ public static partial class Extensions
         };
     }
 
+    public static CreateRatingResponse ToCreateRatingResponse(this IStoredRating storedRating)
+    {
+        return new CreateRatingResponse()
+        {
+            CreatedDT = storedRating.CreatedDt,
+            EntityUid = storedRating.EntityUid,
+            EntityType = storedRating.EntityType.ToString(),
+            RaterUid = storedRating.RaterUid,
+            Rating = storedRating.Rating,
+        };
+    }
+
     public static EntityType GetEntityType(this Entity entity)
     {
         if (entity.PropertyId.HasValue && entity.RealEstateAgentId.HasValue)

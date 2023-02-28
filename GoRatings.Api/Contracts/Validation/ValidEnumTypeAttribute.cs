@@ -2,11 +2,11 @@
 
 namespace GoRatings.Api.Contracts.Validation;
 
-public class ValidEnumType : ValidationAttribute
+public class ValidEnumTypeAttribute : ValidationAttribute
 {
     private readonly Type enumType;
 
-    public ValidEnumType(Type enumType)
+    public ValidEnumTypeAttribute(Type enumType)
     {
         if (!enumType.IsEnum)
             throw new ArgumentException($"Type {nameof(enumType)} is not an enum type");

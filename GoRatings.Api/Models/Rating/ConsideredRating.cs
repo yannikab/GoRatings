@@ -9,7 +9,16 @@ public class ConsideredRating : IConsideredRating
     public DateTime CreatedDT { get; set; }
     public bool IsAnonymous { get; set; }
 
-    public decimal CalculateRating(DateTime referenceDT, int windowDays)
+    public void Validate()
+    {
+        if (!Rating.IsValidFiveStarRating())
+            throw new RatingValueInvalidException(Rating);
+
+        if (CreatedDT > DateTime.UtcNow)
+            throw new RatingDateInvalidException(CreatedDT);
+    }
+
+    public decimal EffectiveRating(DateTime referenceDT, int windowDays)
     {
         if (!(windowDays > 0))
             throw new ArgumentOutOfRangeException(nameof(windowDays));

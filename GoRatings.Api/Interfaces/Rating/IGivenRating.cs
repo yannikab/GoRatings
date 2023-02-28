@@ -8,4 +8,5 @@ public interface IGivenRating
     EntityType EntityType { get; set; }
     Guid? RaterUid { get; set; }
     decimal Rating { get; set; }
+    public bool IsValid();
 }

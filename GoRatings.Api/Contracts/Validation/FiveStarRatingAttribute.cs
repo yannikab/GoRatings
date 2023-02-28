@@ -2,7 +2,7 @@
 
 namespace GoRatings.Api.Contracts.Validation;
 
-public class FiveStarRating : ValidationAttribute
+public class FiveStarRatingAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
     {
@@ -14,15 +14,7 @@ public class FiveStarRating : ValidationAttribute
 
         decimal d = (decimal)value;
 
-        if (d < 0 || d > 5)
-            return false;
-
-        d += d;
-
-        if (d != Math.Floor(d))
-            return false;
-
-        return true;
+        return d.IsValidFiveStarRating();
     }
 
     public override string FormatErrorMessage(string name)

@@ -1,36 +1,52 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
 using GoRatings.Api.Exceptions.Entity;
+using GoRatings.Api.Exceptions.Rating;
 using GoRatings.Api.Interfaces.Rating;
-using GoRatings.Api.Interfaces.Services;
+using GoRatings.Api.Interfaces.Services.Caching;
+using GoRatings.Api.Interfaces.Services.RatingCalculation;
+using GoRatings.Api.Interfaces.Services.RatingPersister;
 
 using Microsoft.AspNetCore.Mvc;
+
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace GoRatings.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Produces("application/json")]
 public class RatingsController : ControllerBase
 {
-    private readonly IRatingPersisterService persisterService;
-    private readonly IRatingCalculationService calculationService;
+    private readonly IRatingPersisterService ratingPersisterService;
+    private readonly IRatingCalculationService ratingCalculationService;
     private readonly ICachingService<Guid, OverallRatingResponse> cachingService;
+    private readonly ILogger<RatingsController> log;
+    private readonly IHostApplicationLifetime hostApplicationLifetime;
 
     public RatingsController(
-        IRatingPersisterService persisterService,
-        IRatingCalculationService calculationService,
-        ICachingService<Guid, OverallRatingResponse> cachingService)
+        IRatingPersisterService ratingPersisterService,
+        IRatingCalculationService ratingCalculationService,
+        ICachingService<Guid, OverallRatingResponse> cachingService,
+        ILogger<RatingsController> log,
+        IHostApplicationLifetime hostApplicationLifetime)
     {
-        this.persisterService = persisterService;
-        this.calculationService = calculationService;
+        this.ratingPersisterService = ratingPersisterService;
+        this.ratingCalculationService = ratingCalculationService;
         this.cachingService = cachingService;
+        this.log = log;
+        this.hostApplicationLifetime = hostApplicationLifetime;
     }
 
     [HttpPost]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult CreateRating([FromBody] CreateRatingRequest request)
+    [SwaggerOperation(Summary = "Adds a new rating.", Description = "Adds a new five-star style rating, for an entity of a specified type. A rater entity can be specified, otherwise the rating is created as anonymous.")]
+    [SwaggerResponse(201, "Rating added successfully.", Type = typeof(CreateRatingResponse))]
+    [SwaggerResponse(400, "Invalid request data.")]
+    [SwaggerResponse(500, "An error has occurred.")]
+    public IActionResult CreateRating([FromBody][SwaggerRequestBody("Rating creation request.", Required = true)] CreateRatingRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
@@ -39,30 +55,52 @@ public class RatingsController : ControllerBase
 
         try
         {
-            var storedRating = persisterService.Add(givenRating);
+            var storedRating = ratingPersisterService.Add(givenRating);
 
-            return CreatedAtAction(nameof(GetRating), new { entityUid = storedRating.EntityUid }, storedRating);
+            var createdRatingResponse = storedRating.ToCreateRatingResponse();
+
+            return CreatedAtAction(nameof(GetRating), new { entityUid = createdRatingResponse.EntityUid }, createdRatingResponse);
         }
-        catch (Exception ex) when (ex is EntityDoesNotExistException || ex is EntityInvalidException || ex is EntityUidTypeMismatchException)
+        catch (Exception ex) when
+        (
+            ex is RatingValueInvalidException ||
+            ex is EntityDoesNotExistException ||
+            ex is EntityInvalidException ||
+            ex is EntityUidTypeMismatchException
+        )
         {
-            Console.WriteLine(ex.Message);
+            log.Info(ex);
 
             return BadRequest(ex.Message);
         }
+        catch (Exception ex) when (!ex.IsCritical())
+        {
+            log.Error(ex);
+
+            return StatusCode(500);
+        }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            log.Critical(ex);
+
+            hostApplicationLifetime.StopApplication();
 
             return StatusCode(500);
         }
     }
 
     [HttpGet("{entityUid:guid}")]
+    [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetRating(Guid entityUid)
+    [SwaggerOperation(Summary = "Gets the overall rating of an entity.", Description = "Returns the calculated overall rating for the entity with the specified unique id. The overall rating is determined by active ratings added for the entity in the past, if the entity is active.")]
+    [SwaggerResponse(200, "Overall rating calculated successfully.", Type = typeof(OverallRatingResponse))]
+    [SwaggerResponse(400, "Invalid request data.")]
+    [SwaggerResponse(404, "No ratings found for the given unique id.")]
+    [SwaggerResponse(500, "An error has occurred.")]
+    public IActionResult GetRating([SwaggerParameter("The unique id of the entity for which the overall rating is calculated.", Required = true)] Guid entityUid)
     {
         try
         {
@@ -71,9 +109,11 @@ public class RatingsController : ControllerBase
 
             int pastDays = Settings.Instance.PastDays;
 
-            var consideredRatings = persisterService.GetWithinPastDays(entityUid, pastDays).Select(sr => sr.ToConsideredRating());
+            var storedRatings = ratingPersisterService.GetWithinPastDays(entityUid, pastDays);
 
-            var overallRating = calculationService.CalculateOverallRating(consideredRatings, pastDays);
+            var consideredRatings = storedRatings.Select(sr => sr.ToConsideredRating());
+
+            var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, DateTime.UtcNow, pastDays);
 
             if (!(overallRating.ConsideredRatings > 0))
                 return NotFound(entityUid);
@@ -84,15 +124,28 @@ public class RatingsController : ControllerBase
 
             return Ok(overallRatingResponse);
         }
-        catch (Exception ex) when (ex is EntityDoesNotExistException || ex is EntityInvalidException)
+        catch (Exception ex) when
+        (
+            ex is RatingValueInvalidException ||
+            ex is EntityDoesNotExistException ||
+            ex is EntityInvalidException
+        )
         {
-            Console.WriteLine(ex.Message);
+            log.Info(ex);
 
             return BadRequest(ex.Message);
         }
+        catch (Exception ex) when (!ex.IsCritical())
+        {
+            log.Error(ex);
+
+            return StatusCode(500);
+        }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            log.Critical(ex);
+
+            hostApplicationLifetime.StopApplication();
 
             return StatusCode(500);
         }

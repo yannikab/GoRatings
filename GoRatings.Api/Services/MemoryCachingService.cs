@@ -1,4 +1,4 @@
-﻿using GoRatings.Api.Interfaces.Services;
+﻿using GoRatings.Api.Interfaces.Services.Caching;
 
 using Microsoft.Extensions.Caching.Memory;
 
