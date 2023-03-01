@@ -6,20 +6,13 @@ namespace GoRatings.Api.Services.Caching;
 
 public class MemoryCachingService<K, V> : ICachingService<K, V>
 {
-    private readonly MemoryCache memoryCache;
     private readonly MemoryCacheEntryOptions memoryCacheEntryOptions;
+    private readonly MemoryCache memoryCache;
 
-    public MemoryCachingService()
+    public MemoryCachingService(TimeSpan cacheExpiration, TimeSpan expirationScanFrequency)
     {
-        memoryCache = new MemoryCache(new MemoryCacheOptions()
-        {
-            ExpirationScanFrequency = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationScanFrequencyMinutes)
-        });
-
-        memoryCacheEntryOptions = new MemoryCacheEntryOptions()
-        {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationMinutes)
-        };
+        memoryCacheEntryOptions = new MemoryCacheEntryOptions() { AbsoluteExpirationRelativeToNow = cacheExpiration };
+        memoryCache = new MemoryCache(new MemoryCacheOptions() { ExpirationScanFrequency = expirationScanFrequency });
     }
 
     public void Add(K key, V value)
@@ -34,6 +27,6 @@ public class MemoryCachingService<K, V> : ICachingService<K, V>
 
     public void Remove(K key)
     {
-        Remove(key);
+        memoryCache.Remove(key);
     }
 }

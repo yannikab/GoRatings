@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 
+using GoRatings.Api;
 using GoRatings.Api.Contracts.Ratings;
 using GoRatings.Api.Interfaces.Services.Caching;
 using GoRatings.Api.Interfaces.Services.PropertyPersister;
@@ -60,12 +61,16 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddScoped<IRatingPersisterService, RatingPersisterService>();
 builder.Services.AddScoped<IPropertyPersisterService, PropertyPersisterService>();
 builder.Services.AddScoped<IRealEstateAgentPersisterService, RealEstateAgentPersisterService>();
+builder.Services.AddScoped<IRatingPersisterService, RatingPersisterService>();
 
 builder.Services.AddSingleton<IRatingCalculationService, RatingCalculationService>();
-builder.Services.AddSingleton<ICachingService<Guid, OverallRatingResponse>, MemoryCachingService<Guid, OverallRatingResponse>>();
+
+var cacheExpiration = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationMinutes);
+var cacheExpirationScanFrequency = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationScanFrequencyMinutes);
+builder.Services.AddSingleton<ICachingService<Guid, OverallRatingResponse>>(provider => new MemoryCachingService<Guid, OverallRatingResponse>(cacheExpiration, cacheExpirationScanFrequency));
+
 builder.Services.AddHostedService<OldRatingsCleanupService>();
 
 var app = builder.Build();
