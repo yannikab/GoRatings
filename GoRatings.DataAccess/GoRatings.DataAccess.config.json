@@ -2,5 +2,5 @@
   "connectionStringLocal": "Server=.\\MSSQL15;Initial Catalog=GoRatings;Integrated Security=true;Min pool size=50;Max pool size=1000;",
   "connectionStringLive": "Server=localhost,1433;Initial Catalog=GoRatings;User ID=sa;Password=G0R4t1ngs12!;Min pool size=50;Max pool size=1000;",
 
-  "developmentMode": true
+  "developmentMode": false
 }
