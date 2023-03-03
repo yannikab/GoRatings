@@ -1,9 +1,8 @@
-using GoRatings.Api.Interfaces.Rating;
-using GoRatings.Api.Interfaces.Services.Caching;
-using GoRatings.Api.Models.Rating;
-using GoRatings.Api.Services.Caching;
+using GoRatings.Services.Caching;
+using GoRatings.Services.RatingCalculation.Interfaces;
+using GoRatings.Services.RatingCalculation.Models;
 
-namespace GoRatings.Api.Tests
+namespace GoRatings.Services.Tests
 {
     [TestClass]
     public class CachingTests

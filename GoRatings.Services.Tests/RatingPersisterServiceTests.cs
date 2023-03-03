@@ -1,14 +1,11 @@
-using GoRatings.Api.Exceptions.Entity;
-using GoRatings.Api.Exceptions.Rating;
-using GoRatings.Api.Interfaces.Rating;
-using GoRatings.Api.Interfaces.Services.PropertyPersister;
-using GoRatings.Api.Interfaces.Services.RatingPersister;
-using GoRatings.Api.Models.Entity;
-using GoRatings.Api.Models.Rating;
-using GoRatings.Api.Services.PropertyPersister;
-using GoRatings.Api.Services.RatingPersister;
+using GoRatings.Services.Enums;
+using GoRatings.Services.PropertyPersister;
+using GoRatings.Services.RatingPersister;
+using GoRatings.Services.RatingPersister.Exceptions;
+using GoRatings.Services.RatingPersister.Interfaces;
+using GoRatings.Services.RatingPersister.Models;
 
-namespace GoRatings.Api.Tests
+namespace GoRatings.Services.Tests
 {
     [TestClass]
     public class RatingPersisterServiceTests

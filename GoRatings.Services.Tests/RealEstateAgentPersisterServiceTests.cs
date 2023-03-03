@@ -1,10 +1,9 @@
-using GoRatings.Api.Exceptions.RealEstateAgent;
-using GoRatings.Api.Interfaces.RealEstateAgent;
-using GoRatings.Api.Interfaces.Services.RealEstateAgentPersister;
-using GoRatings.Api.Models.RealEstateAgent;
-using GoRatings.Api.Services.RealEstateAgentPersister;
+using GoRatings.Services.RealEstateAgentPersister;
+using GoRatings.Services.RealEstateAgentPersister.Exceptions;
+using GoRatings.Services.RealEstateAgentPersister.Interfaces;
+using GoRatings.Services.RealEstateAgentPersister.Models;
 
-namespace GoRatings.Api.Tests
+namespace GoRatings.Services.Tests
 {
     [TestClass]
     public class RealEstateAgentPersisterServiceTests

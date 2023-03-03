@@ -1,10 +1,9 @@
-using GoRatings.Api.Exceptions.Property;
-using GoRatings.Api.Interfaces.Property;
-using GoRatings.Api.Interfaces.Services.PropertyPersister;
-using GoRatings.Api.Models.Property;
-using GoRatings.Api.Services.PropertyPersister;
+using GoRatings.Services.PropertyPersister;
+using GoRatings.Services.PropertyPersister.Exceptions;
+using GoRatings.Services.PropertyPersister.Interfaces;
+using GoRatings.Services.PropertyPersister.Models;
 
-namespace GoRatings.Api.Tests
+namespace GoRatings.Services.Tests
 {
     [TestClass]
     public class PropertyPersisterServiceTests

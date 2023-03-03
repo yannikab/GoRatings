@@ -1,11 +1,10 @@
-using GoRatings.Api.Exceptions.Rating;
-using GoRatings.Api.Interfaces.Services.RatingCalculation;
-using GoRatings.Api.Models.Rating;
-using GoRatings.Api.Services.RatingCalculation;
 using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.Repository;
+using GoRatings.Services.RatingCalculation;
+using GoRatings.Services.RatingCalculation.Exceptions;
+using GoRatings.Services.RatingCalculation.Models;
 
-namespace GoRatings.Api.Tests
+namespace GoRatings.Services.Tests
 {
     [TestClass]
     public class RatingCalculationServiceTests
@@ -38,7 +37,7 @@ namespace GoRatings.Api.Tests
 
             var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, windowDays);
 
-            Assert.IsTrue(overallRating.IsValid());
+            Assert.IsTrue(overallRating.IsValid);
 
             if (consideredRatings.Count == 0)
                 Assert.AreEqual(0m, overallRating.Rating);
@@ -59,7 +58,7 @@ namespace GoRatings.Api.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(RatingValueInvalidException))]
+        [ExpectedException(typeof(RatingCalculationException))]
         public void CalculateInvalidRatingValue()
         {
             DateTime referenceDT = DateTime.UtcNow;
@@ -73,7 +72,7 @@ namespace GoRatings.Api.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(RatingDateInvalidException))]
+        [ExpectedException(typeof(RatingCalculationException))]
         public void CalculateInvalidRatingDate()
         {
             DateTime referenceDT = DateTime.UtcNow;
