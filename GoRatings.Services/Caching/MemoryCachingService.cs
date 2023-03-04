@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using GoRatings.Services.Caching.Interfaces;
+
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GoRatings.Services.Caching;
 

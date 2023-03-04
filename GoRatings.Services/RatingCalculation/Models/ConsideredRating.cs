@@ -8,8 +8,12 @@ public class ConsideredRating : IConsideredRating
     public decimal Rating { get; set; }
     public DateTime CreatedDT { get; set; }
     public bool IsAnonymous { get; set; }
-    public bool IsValid { get { return Rating.IsValidFiveStarRating(); } }
-    
+
+    public bool IsValid()
+    {
+        return Rating.IsValidFiveStarRating();
+    }
+
     public decimal EffectiveRating(DateTime referenceDT, int windowDays)
     {
         if (!(windowDays > 0))

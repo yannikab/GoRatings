@@ -2,6 +2,7 @@ using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.Repository;
 using GoRatings.Services.RatingCalculation;
 using GoRatings.Services.RatingCalculation.Exceptions;
+using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingCalculation.Models;
 
 namespace GoRatings.Services.Tests
@@ -37,7 +38,7 @@ namespace GoRatings.Services.Tests
 
             var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, windowDays);
 
-            Assert.IsTrue(overallRating.IsValid);
+            Assert.IsTrue(overallRating.IsValid());
 
             if (consideredRatings.Count == 0)
                 Assert.AreEqual(0m, overallRating.Rating);

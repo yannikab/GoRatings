@@ -1,3 +1,4 @@
+using GoRatings.Services.RatingCalculation.Exceptions;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingCalculation.Models;
 
@@ -20,7 +21,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = false,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
         }
 
         [TestMethod]
@@ -33,7 +34,24 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = false,
             };
 
-            Assert.IsFalse(consideredRating.IsValid);
+            Assert.IsFalse(consideredRating.IsValid());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(RatingCalculationException))]
+        public void InvalidRatingFutureDate()
+        {
+            DateTime referenceDT = DateTime.UtcNow;
+            int windowDays = 10;
+
+            IConsideredRating consideredRating = new ConsideredRating()
+            {
+                Rating = 5.0m,
+                CreatedDT = referenceDT.AddDays(1),
+                IsAnonymous = false,
+            };
+
+            decimal _ = consideredRating.EffectiveRating(referenceDT, windowDays);
         }
 
         [TestMethod]
@@ -49,7 +67,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = false,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(100m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -66,7 +84,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = false,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(50m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -83,7 +101,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = false,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -100,7 +118,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = false,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -117,7 +135,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = true,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(10m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -134,7 +152,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = true,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(5m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -151,7 +169,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = true,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
 
@@ -168,7 +186,7 @@ namespace GoRatings.Services.Tests
                 IsAnonymous = true,
             };
 
-            Assert.IsTrue(consideredRating.IsValid);
+            Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
         }
     }

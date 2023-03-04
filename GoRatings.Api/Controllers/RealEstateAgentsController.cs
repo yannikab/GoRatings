@@ -1,7 +1,6 @@
 ﻿using GoRatings.Api.Contracts.RealEstateAgents;
-using GoRatings.Api.Exceptions.RealEstateAgent;
-using GoRatings.Api.Interfaces.RealEstateAgent;
-using GoRatings.Api.Interfaces.Services.RealEstateAgentPersister;
+using GoRatings.Services.RealEstateAgentPersister.Exceptions;
+using GoRatings.Services.RealEstateAgentPersister.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 

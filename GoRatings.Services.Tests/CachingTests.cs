@@ -1,4 +1,5 @@
 using GoRatings.Services.Caching;
+using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingCalculation.Models;
 

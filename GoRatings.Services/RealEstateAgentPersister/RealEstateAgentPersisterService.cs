@@ -1,7 +1,7 @@
 ﻿using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.UnitOfWork;
-using GoRatings.Services.RealEstateAgentPersister.Exceptions;
 using GoRatings.Services.RealEstateAgentPersister.Interfaces;
+using GoRatings.Services.RealEstateAgentPersister.Exceptions;
 
 namespace GoRatings.Services.RealEstateAgentPersister;
 

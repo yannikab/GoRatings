@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Log\**" />
+    <Content Remove="Log\**" />
+    <EmbeddedResource Remove="Log\**" />
+    <None Remove="Log\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="GoRatings.Api.config.json" />
   </ItemGroup>
 
@@ -36,7 +43,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GoRatings.DataAccess\GoRatings.DataAccess.csproj" />
+    <ProjectReference Include="..\GoRatings.Services\GoRatings.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

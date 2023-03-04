@@ -1,5 +1,4 @@
-﻿using GoRatings.Services.Enums;
-using GoRatings.Services.RatingPersister.Interfaces;
+﻿using GoRatings.Services.RatingPersister.Interfaces;
 
 namespace GoRatings.Services.RatingPersister.Models;
 

@@ -1,6 +1,4 @@
-﻿using GoRatings.Services.Enums;
-
-namespace GoRatings.Services.RatingPersister.Exceptions;
+﻿namespace GoRatings.Services.RatingPersister.Exceptions;
 
 public class EntityUidTypeMismatchException : Exception
 {

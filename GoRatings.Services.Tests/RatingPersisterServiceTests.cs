@@ -1,5 +1,5 @@
-using GoRatings.Services.Enums;
 using GoRatings.Services.PropertyPersister;
+using GoRatings.Services.PropertyPersister.Interfaces;
 using GoRatings.Services.RatingPersister;
 using GoRatings.Services.RatingPersister.Exceptions;
 using GoRatings.Services.RatingPersister.Interfaces;

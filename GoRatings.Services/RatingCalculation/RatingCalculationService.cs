@@ -16,7 +16,7 @@ public class RatingCalculationService : IRatingCalculationService
 
         foreach (var cr in consideredRatings)
         {
-            if (!cr.IsValid)
+            if (!cr.IsValid())
                 throw new RatingCalculationException();
 
             rating += cr.EffectiveRating(referenceDT, windowDays);
@@ -40,7 +40,7 @@ public class RatingCalculationService : IRatingCalculationService
             Rating = rating,
         };
 
-        if (!overallRating.IsValid)
+        if (!overallRating.IsValid())
             throw new OverallRatingInvalidException(overallRating.Rating);
 
         return overallRating;

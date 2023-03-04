@@ -3,17 +3,19 @@ using System.Text.Json.Serialization;
 
 using GoRatings.Api;
 using GoRatings.Api.Contracts.Ratings;
-using GoRatings.Api.Interfaces.Services.Caching;
-using GoRatings.Api.Interfaces.Services.PropertyPersister;
-using GoRatings.Api.Interfaces.Services.RatingCalculation;
-using GoRatings.Api.Interfaces.Services.RatingPersister;
-using GoRatings.Api.Interfaces.Services.RealEstateAgentPersister;
-using GoRatings.Api.Services.Caching;
-using GoRatings.Api.Services.OldRatingsCleanup;
-using GoRatings.Api.Services.PropertyPersister;
-using GoRatings.Api.Services.RatingCalculation;
-using GoRatings.Api.Services.RatingPersister;
-using GoRatings.Api.Services.RealEstateAgentPersister;
+using GoRatings.Api.Services.RatingsCleanup;
+using GoRatings.Services.Caching;
+using GoRatings.Services.Caching.Interfaces;
+using GoRatings.Services.PropertyPersister;
+using GoRatings.Services.PropertyPersister.Interfaces;
+using GoRatings.Services.RatingCalculation;
+using GoRatings.Services.RatingCalculation.Interfaces;
+using GoRatings.Services.RatingPersister;
+using GoRatings.Services.RatingPersister.Interfaces;
+using GoRatings.Services.RatingsCleanup;
+using GoRatings.Services.RatingsCleanup.Interfaces;
+using GoRatings.Services.RealEstateAgentPersister;
+using GoRatings.Services.RealEstateAgentPersister.Interfaces;
 
 using Microsoft.OpenApi.Models;
 
@@ -71,7 +73,8 @@ var cacheExpiration = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationMinu
 var cacheExpirationScanFrequency = TimeSpan.FromMinutes(Settings.Instance.CacheExpirationScanFrequencyMinutes);
 builder.Services.AddSingleton<ICachingService<Guid, OverallRatingResponse>>(provider => new MemoryCachingService<Guid, OverallRatingResponse>(cacheExpiration, cacheExpirationScanFrequency));
 
-builder.Services.AddHostedService<OldRatingsCleanupService>();
+builder.Services.AddSingleton<IRatingsCleanupService, RatingsCleanupService>();
+builder.Services.AddHostedService<RatingsCleanupHostedService>();
 
 var app = builder.Build();
 

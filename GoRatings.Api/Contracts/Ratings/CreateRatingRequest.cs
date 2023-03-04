@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using GoRatings.Api.Contracts.Validation;
-using GoRatings.Api.Models.Entity;
+using GoRatings.Services;
 
 namespace GoRatings.Api.Contracts.Ratings;
 
