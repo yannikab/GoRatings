@@ -52,7 +52,7 @@ public class RatingsController : ControllerBase
     [SwaggerResponse(201, "Rating added successfully.", Type = typeof(CreateRatingResponse))]
     [SwaggerResponse(400, "Invalid request data.")]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult CreateRating([FromBody][SwaggerRequestBody("Rating creation request.", Required = true)] CreateRatingRequest request)
+    public async Task<IActionResult> CreateRating([FromBody][SwaggerRequestBody("Rating creation request.", Required = true)] CreateRatingRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
@@ -61,7 +61,7 @@ public class RatingsController : ControllerBase
 
         try
         {
-            var storedRating = ratingPersisterService.Add(givenRating);
+            var storedRating = await ratingPersisterService.AddAsync(givenRating);
 
             var createdRatingResponse = storedRating.ToCreateRatingResponse();
 
@@ -106,7 +106,7 @@ public class RatingsController : ControllerBase
     [SwaggerResponse(400, "Invalid request data.")]
     [SwaggerResponse(404, "No ratings found for the given unique id.")]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult GetRating([SwaggerParameter("The unique id of the entity for which the overall rating is calculated.", Required = true)] Guid entityUid)
+    public async Task<IActionResult> GetRating([SwaggerParameter("The unique id of the entity for which the overall rating is calculated.", Required = true)] Guid entityUid)
     {
         try
         {
@@ -115,11 +115,11 @@ public class RatingsController : ControllerBase
 
             int pastDays = Settings.Instance.PastDays;
 
-            var storedRatings = ratingPersisterService.GetWithinPastDays(entityUid, pastDays);
+            var storedRatings = await ratingPersisterService.GetWithinPastDaysAsync(entityUid, pastDays);
 
             var consideredRatings = storedRatings.Select(sr => sr.ToConsideredRating(consideredRatingFactory));
 
-            var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, DateTime.UtcNow, pastDays);
+            var overallRating = await ratingCalculationService.CalculateOverallRatingAsync(consideredRatings, DateTime.UtcNow, pastDays);
 
             if (!(overallRating.ConsideredRatings > 0))
                 return NotFound(entityUid);

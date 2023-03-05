@@ -41,7 +41,7 @@ public class PropertiesController : ControllerBase
     [SwaggerResponse(201, "Property added successfully.", Type = typeof(CreatePropertyResponse))]
     [SwaggerResponse(400, "Invalid request data.")]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult CreateProperty([FromBody][SwaggerRequestBody("Property creation request.", Required = true)] CreatePropertyRequest request)
+    public async Task<IActionResult> CreateProperty([FromBody][SwaggerRequestBody("Property creation request.", Required = true)] CreatePropertyRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
@@ -50,7 +50,7 @@ public class PropertiesController : ControllerBase
 
         try
         {
-            var storedProperty = persisterService.Add(givenProperty);
+            var storedProperty = await persisterService.AddAsync(givenProperty);
 
             var createProperyResponse = storedProperty.ToCreatePropertyResponse();
 
@@ -81,11 +81,11 @@ public class PropertiesController : ControllerBase
     [SwaggerResponse(200, "Property found.", Type = typeof(GetPropertyResponse))]
     [SwaggerResponse(404, "No property found with the given unique id.")]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult GetProperty([SwaggerParameter("The unique id of the property to be retrieved.", Required = true)] Guid entityUid)
+    public async Task<IActionResult> GetProperty([SwaggerParameter("The unique id of the property to be retrieved.", Required = true)] Guid entityUid)
     {
         try
         {
-            var storedProperty = persisterService.Get(entityUid);
+            var storedProperty = await persisterService.GetAsync(entityUid);
 
             return Ok(storedProperty.ToGetPropertyResponse());
         }
@@ -118,11 +118,11 @@ public class PropertiesController : ControllerBase
     [SwaggerOperation(Summary = "Retrieves all stored properties.", Description = "Retrieves all stored properties, including inactive ones, with all their associated data.")]
     [SwaggerResponse(200, "All available properties retrieved.", Type = typeof(IEnumerable<GetPropertyResponse>))]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult GetAllProperties()
+    public async Task<IActionResult> GetAllProperties()
     {
         try
         {
-            var storedProperties = persisterService.GetAll();
+            var storedProperties = await persisterService.GetAllAsync();
 
             return Ok(storedProperties.Select(sp => sp.ToGetPropertyResponse()));
         }

@@ -41,7 +41,7 @@ public class RealEstateAgentsController : ControllerBase
     [SwaggerResponse(201, "Real estate agent added successfully.", Type = typeof(CreateRealEstateAgentResponse))]
     [SwaggerResponse(400, "Invalid request data.")]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult CreateRealEstateAgent([FromBody][SwaggerRequestBody("Real estate agent creation request.", Required = true)] CreateRealEstateAgentRequest request)
+    public async Task<IActionResult> CreateRealEstateAgent([FromBody][SwaggerRequestBody("Real estate agent creation request.", Required = true)] CreateRealEstateAgentRequest request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
@@ -50,7 +50,7 @@ public class RealEstateAgentsController : ControllerBase
 
         try
         {
-            var storedRealEstateAgent = persisterService.Add(givenRealEstateAgent);
+            var storedRealEstateAgent = await persisterService.AddAsync(givenRealEstateAgent);
 
             var createRealEstateAgentResponse = storedRealEstateAgent.ToCreateRealEstateAgentResponse();
 
@@ -81,11 +81,11 @@ public class RealEstateAgentsController : ControllerBase
     [SwaggerResponse(200, "Real estate agent found.", Type = typeof(GetRealEstateAgentResponse))]
     [SwaggerResponse(404, "No property found with the given unique id.")]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult GetRealEstateAgent([SwaggerParameter("The unique id of the real estate agent to be retrieved.", Required = true)] Guid entityUid)
+    public async Task<IActionResult> GetRealEstateAgent([SwaggerParameter("The unique id of the real estate agent to be retrieved.", Required = true)] Guid entityUid)
     {
         try
         {
-            var storedRealEstateAgent = persisterService.Get(entityUid);
+            var storedRealEstateAgent = await persisterService.GetAsync(entityUid);
 
             return Ok(storedRealEstateAgent.ToGetRealEstateAgentResponse());
         }
@@ -118,11 +118,11 @@ public class RealEstateAgentsController : ControllerBase
     [SwaggerOperation(Summary = "Retrieves all stored real estate agents.", Description = "Retrieves all stored real estate agents, including inactive ones, with all their associated data.")]
     [SwaggerResponse(200, "All available real estate agents retrieved.", Type = typeof(IEnumerable<GetRealEstateAgentResponse>))]
     [SwaggerResponse(500, "An error has occurred.")]
-    public IActionResult GetAllRealEstateAgents()
+    public async Task<IActionResult> GetAllRealEstateAgents()
     {
         try
         {
-            var storedRealEstateAgents = persisterService.GetAll();
+            var storedRealEstateAgents = await persisterService.GetAllAsync();
 
             return Ok(storedRealEstateAgents.Select(sp => sp.ToGetRealEstateAgentResponse()));
         }
