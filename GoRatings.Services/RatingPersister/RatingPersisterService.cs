@@ -1,7 +1,7 @@
 ﻿using GoRatings.DataAccess.Models;
 using GoRatings.DataAccess.UnitOfWork;
-using GoRatings.Services.RatingPersister.Interfaces;
 using GoRatings.Services.RatingPersister.Exceptions;
+using GoRatings.Services.RatingPersister.Interfaces;
 
 namespace GoRatings.Services.RatingPersister;
 

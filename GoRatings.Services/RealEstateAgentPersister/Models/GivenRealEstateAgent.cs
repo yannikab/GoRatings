@@ -2,7 +2,7 @@
 
 namespace GoRatings.Services.RealEstateAgentPersister.Models;
 
-public class GivenRealEstateAgent : IGivenRealEstateAgent
+internal class GivenRealEstateAgent : IGivenRealEstateAgent
 {
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;

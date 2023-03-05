@@ -8,14 +8,18 @@ using GoRatings.Services.Caching;
 using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.PropertyPersister;
 using GoRatings.Services.PropertyPersister.Interfaces;
+using GoRatings.Services.PropertyPersister.Models;
 using GoRatings.Services.RatingCalculation;
 using GoRatings.Services.RatingCalculation.Interfaces;
+using GoRatings.Services.RatingCalculation.Models;
 using GoRatings.Services.RatingPersister;
 using GoRatings.Services.RatingPersister.Interfaces;
+using GoRatings.Services.RatingPersister.Models;
 using GoRatings.Services.RatingsCleanup;
 using GoRatings.Services.RatingsCleanup.Interfaces;
 using GoRatings.Services.RealEstateAgentPersister;
 using GoRatings.Services.RealEstateAgentPersister.Interfaces;
+using GoRatings.Services.RealEstateAgentPersister.Models;
 
 using Microsoft.OpenApi.Models;
 
@@ -62,6 +66,11 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
 });
+
+builder.Services.AddSingleton<IGivenPropertyFactory, GivenPropertyFactory>();
+builder.Services.AddSingleton<IGivenRealEstateAgentFactory, GivenRealEstateAgentFactory>();
+builder.Services.AddSingleton<IGivenRatingFactory, GivenRatingFactory>();
+builder.Services.AddSingleton<IConsideredRatingFactory, ConsideredRatingFactory>();
 
 builder.Services.AddScoped<IPropertyPersisterService, PropertyPersisterService>();
 builder.Services.AddScoped<IRealEstateAgentPersisterService, RealEstateAgentPersisterService>();

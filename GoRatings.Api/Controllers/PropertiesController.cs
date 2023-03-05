@@ -12,15 +12,20 @@ namespace GoRatings.Api.Controllers;
 [Route("[controller]")]
 public class PropertiesController : ControllerBase
 {
+    private readonly IGivenPropertyFactory givenPropertyFactory;
+
     private readonly IPropertyPersisterService persisterService;
+
     private readonly ILogger<RatingsController> log;
     private readonly IHostApplicationLifetime hostApplicationLifetime;
 
     public PropertiesController(
+        IGivenPropertyFactory givenPropertyFactory,
         IPropertyPersisterService persisterService,
         ILogger<RatingsController> log,
         IHostApplicationLifetime hostApplicationLifetime)
     {
+        this.givenPropertyFactory = givenPropertyFactory;
         this.persisterService = persisterService;
         this.log = log;
         this.hostApplicationLifetime = hostApplicationLifetime;
@@ -41,7 +46,7 @@ public class PropertiesController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
 
-        IGivenProperty givenProperty = request.ToGivenProperty();
+        IGivenProperty givenProperty = request.ToGivenProperty(givenPropertyFactory);
 
         try
         {

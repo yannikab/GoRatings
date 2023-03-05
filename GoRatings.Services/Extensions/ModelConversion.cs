@@ -1,7 +1,5 @@
 ﻿using GoRatings.DataAccess.Models;
 using GoRatings.Services.PropertyPersister.Interfaces;
-using GoRatings.Services.RatingCalculation.Interfaces;
-using GoRatings.Services.RatingCalculation.Models;
 using GoRatings.Services.RatingPersister.Interfaces;
 using GoRatings.Services.RealEstateAgentPersister.Interfaces;
 
@@ -61,16 +59,6 @@ public static partial class Extensions
                 CreatedDt = DateTime.UtcNow,
                 IsActive = true,
             },
-        };
-    }
-
-    public static IConsideredRating ToConsideredRating(this IStoredRating storedRating)
-    {
-        return new ConsideredRating()
-        {
-            Rating = storedRating.Rating,
-            CreatedDT = storedRating.CreatedDt,
-            IsAnonymous = !storedRating.RaterUid.HasValue,
         };
     }
 }

@@ -8,10 +8,14 @@ namespace GoRatings.Services.Tests
     [TestClass]
     public class PropertyPersisterServiceTests
     {
+        private readonly IGivenPropertyFactory givenPropertyFactory;
+
         private readonly IPropertyPersisterService propertyPersisterService;
 
         public PropertyPersisterServiceTests()
         {
+            givenPropertyFactory = new GivenPropertyFactory();
+
             propertyPersisterService = new PropertyPersisterService();
         }
 
@@ -20,18 +24,17 @@ namespace GoRatings.Services.Tests
         {
             int propertiesBefore = propertyPersisterService.GetAll().Count();
 
-            IGivenProperty givenProperty = new GivenProperty()
-            {
-                Code = "Property_Test",
-                Description = "Property persister service test",
-                Address = "Smparouni Trikorfou 8",
-                City = "Athens",
-                State = null,
-                ZipCode = null,
-                SquareFootage = 72,
-                YearBuilt = 1986,
-                ListingPrice = 80000m,
-            };
+            IGivenProperty givenProperty = givenPropertyFactory.CreateGivenProperty(
+                "Property_Test",
+                "Property persister service test",
+                "Smparouni Trikorfou 8",
+                "Athens",
+                null,
+                null,
+                72,
+                1986,
+                80000m
+            );
 
             var storedPropertyA = propertyPersisterService.Add(givenProperty);
 

@@ -8,10 +8,13 @@ namespace GoRatings.Services.Tests
     [TestClass]
     public class RealEstateAgentPersisterServiceTests
     {
+        private readonly IGivenRealEstateAgentFactory givenRealEstateAgentFactory;
         private readonly IRealEstateAgentPersisterService realEstateAgentPersisterService;
 
         public RealEstateAgentPersisterServiceTests()
         {
+            givenRealEstateAgentFactory = new GivenRealEstateAgentFactory();
+
             realEstateAgentPersisterService = new RealEstateAgentPersisterService();
         }
 
@@ -20,17 +23,16 @@ namespace GoRatings.Services.Tests
         {
             int realEstateAgentsBefore = realEstateAgentPersisterService.GetAll().Count();
 
-            IGivenRealEstateAgent givenRealEstateAgent = new GivenRealEstateAgent()
-            {
-                Code = "RealEstateAgent_Test",
-                Description = "Real estate agent persister service test",
-                FirstName = "Jennifer",
-                LastName = "Davis",
-                Email = "jennifer.davis@compass.com",
-                Phone = "555-567-8901",
-                LicenseNumber = "KL123456",
-                BrokerageFirm = "Compass",
-            };
+            IGivenRealEstateAgent givenRealEstateAgent = givenRealEstateAgentFactory.CreateGivenRealEstateAgent(
+                "RealEstateAgent_Test",
+                "Real estate agent persister service test",
+                "Jennifer",
+                "Davis",
+                "jennifer.davis@compass.com",
+                "555-567-8901",
+                "KL123456",
+                "Compass"
+            );
 
             var storedRealEstateAgentA = realEstateAgentPersisterService.Add(givenRealEstateAgent);
 

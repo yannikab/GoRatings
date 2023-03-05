@@ -2,7 +2,7 @@
 
 namespace GoRatings.Services.RatingPersister.Models;
 
-public class GivenRating : IGivenRating
+internal class GivenRating : IGivenRating
 {
     public Guid EntityUid { get; set; }
     public EntityType EntityType { get; set; }

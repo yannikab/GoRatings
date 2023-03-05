@@ -1,24 +1,22 @@
 ﻿using GoRatings.Api.Contracts.RealEstateAgents;
 using GoRatings.Services.RealEstateAgentPersister.Interfaces;
-using GoRatings.Services.RealEstateAgentPersister.Models;
 
 namespace GoRatings.Api;
 
 public static partial class Extensions
 {
-    public static IGivenRealEstateAgent ToGivenRealEstateAgent(this CreateRealEstateAgentRequest request)
+    public static IGivenRealEstateAgent ToGivenRealEstateAgent(this CreateRealEstateAgentRequest request, IGivenRealEstateAgentFactory givenRealEstateAgentFactory)
     {
-        return new GivenRealEstateAgent()
-        {
-            Code = request.Code,
-            Description = request.Description,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email,
-            Phone = request.Phone,
-            LicenseNumber = request.LicenseNumber,
-            BrokerageFirm = request.BrokerageFirm,
-        };
+        return givenRealEstateAgentFactory.CreateGivenRealEstateAgent(
+            request.Code,
+            request.Description,
+            request.FirstName,
+            request.LastName,
+            request.Email,
+            request.Phone,
+            request.LicenseNumber,
+            request.BrokerageFirm
+        );
     }
 
     public static CreateRealEstateAgentResponse ToCreateRealEstateAgentResponse(this IStoredRealEstateAgent storedRealEstateAgent)

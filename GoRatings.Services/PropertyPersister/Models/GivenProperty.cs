@@ -2,7 +2,7 @@
 
 namespace GoRatings.Services.PropertyPersister.Models;
 
-public class GivenProperty : IGivenProperty
+internal class GivenProperty : IGivenProperty
 {
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;

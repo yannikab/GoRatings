@@ -1,22 +1,19 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
-using GoRatings.Services;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingPersister.Interfaces;
-using GoRatings.Services.RatingPersister.Models;
 
 namespace GoRatings.Api;
 
 public static partial class Extensions
 {
-    public static IGivenRating ToGivenRating(this CreateRatingRequest request)
+    public static IGivenRating ToGivenRating(this CreateRatingRequest request, IGivenRatingFactory givenRatingFactory)
     {
-        return new GivenRating()
-        {
-            EntityUid = request.EntityUid,
-            EntityType = (EntityType)Enum.Parse(typeof(EntityType), request.EntityType),
-            RaterUid = request.RaterUid,
-            Rating = request.Rating,
-        };
+        return givenRatingFactory.CreateGivenRating(
+            request.EntityUid,
+            request.EntityType,
+            request.RaterUid,
+            request.Rating
+        );
     }
 
     public static OverallRatingResponse ToOverallRatingResponse(this IOverallRating overallRating, Guid entityUid)
@@ -40,5 +37,14 @@ public static partial class Extensions
             RaterUid = storedRating.RaterUid,
             Rating = storedRating.Rating,
         };
+    }
+
+    public static IConsideredRating ToConsideredRating(this IStoredRating storedRating, IConsideredRatingFactory consideredRatingFactory)
+    {
+        return consideredRatingFactory.CreateConsideredRating(
+            storedRating.Rating,
+            storedRating.CreatedDt,
+            !storedRating.RaterUid.HasValue
+        );
     }
 }

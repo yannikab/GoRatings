@@ -1,25 +1,23 @@
 ﻿using GoRatings.Api.Contracts.Properties;
 using GoRatings.Services.PropertyPersister.Interfaces;
-using GoRatings.Services.PropertyPersister.Models;
 
 namespace GoRatings.Api;
 
 public static partial class Extensions
 {
-    public static IGivenProperty ToGivenProperty(this CreatePropertyRequest request)
+    public static IGivenProperty ToGivenProperty(this CreatePropertyRequest request, IGivenPropertyFactory givenPropertyFactory)
     {
-        return new GivenProperty()
-        {
-            Code = request.Code,
-            Description = request.Description,
-            Address = request.Address,
-            City = request.City,
-            State = request.State,
-            ZipCode = request.ZipCode,
-            SquareFootage = request.SquareFootage,
-            YearBuilt = request.YearBuilt,
-            ListingPrice = request.ListingPrice,
-        };
+        return givenPropertyFactory.CreateGivenProperty(
+            request.Code,
+            request.Description,
+            request.Address,
+            request.City,
+            request.State,
+            request.ZipCode,
+            request.SquareFootage,
+            request.YearBuilt,
+            request.ListingPrice
+        );
     }
 
     public static CreatePropertyResponse ToCreatePropertyResponse(this IStoredProperty storedProperty)

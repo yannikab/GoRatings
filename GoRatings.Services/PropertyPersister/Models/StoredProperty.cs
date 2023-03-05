@@ -2,7 +2,7 @@
 
 namespace GoRatings.Services.PropertyPersister.Models;
 
-public class StoredProperty : GivenProperty, IStoredProperty
+internal class StoredProperty : GivenProperty, IStoredProperty
 {
     public Guid EntityUid { get; set; }
     public DateTime CreatedDT { get; set; }

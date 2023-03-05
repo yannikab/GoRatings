@@ -2,7 +2,7 @@
 
 namespace GoRatings.Services.RealEstateAgentPersister.Models;
 
-public class StoredRealEstateAgent : GivenRealEstateAgent, IStoredRealEstateAgent
+internal class StoredRealEstateAgent : GivenRealEstateAgent, IStoredRealEstateAgent
 {
     public Guid EntityUid { get; set; }
     public DateTime CreatedDT { get; set; }

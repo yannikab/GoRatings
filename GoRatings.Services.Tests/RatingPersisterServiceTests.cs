@@ -10,11 +10,15 @@ namespace GoRatings.Services.Tests
     [TestClass]
     public class RatingPersisterServiceTests
     {
+        private readonly IGivenRatingFactory givenRatingFactory;
+
         private readonly IRatingPersisterService ratingPersisterService;
         private readonly IPropertyPersisterService propertyPersisterService;
 
         public RatingPersisterServiceTests()
         {
+            givenRatingFactory = new GivenRatingFactory();
+
             ratingPersisterService = new RatingPersisterService();
             propertyPersisterService = new PropertyPersisterService();
         }
@@ -23,13 +27,12 @@ namespace GoRatings.Services.Tests
         [ExpectedException(typeof(EntityDoesNotExistException))]
         public void AddRatingNonExistentEntity()
         {
-            ratingPersisterService.Add(new GivenRating()
-            {
-                EntityUid = Guid.NewGuid(),
-                EntityType = EntityType.Property,
-                RaterUid = Guid.NewGuid(),
-                Rating = 5,
-            });
+            ratingPersisterService.Add(givenRatingFactory.CreateGivenRating(
+                Guid.NewGuid(),
+                "Property",
+                Guid.NewGuid(),
+                5
+            ));
         }
 
         [TestMethod]
@@ -42,13 +45,12 @@ namespace GoRatings.Services.Tests
 
             int existingRatings = ratingPersisterService.GetWithinPastDays(storedProperty.EntityUid, 1000000).Count();
 
-            IGivenRating givenRating = new GivenRating()
-            {
-                EntityUid = storedProperty.EntityUid,
-                EntityType = EntityType.Property,
-                RaterUid = Guid.NewGuid(),
-                Rating = 5,
-            };
+            IGivenRating givenRating = givenRatingFactory.CreateGivenRating(
+                storedProperty.EntityUid,
+                "Property",
+                Guid.NewGuid(),
+                5
+            );
 
             var storedRating = ratingPersisterService.Add(givenRating);
 
@@ -71,13 +73,12 @@ namespace GoRatings.Services.Tests
             if (storedProperty == null)
                 Assert.Fail();
 
-            IGivenRating givenRating = new GivenRating()
-            {
-                EntityUid = storedProperty.EntityUid,
-                EntityType = EntityType.Property,
-                RaterUid = Guid.NewGuid(),
-                Rating = 2.3m,
-            };
+            IGivenRating givenRating = givenRatingFactory.CreateGivenRating(
+                storedProperty.EntityUid,
+                "Property",
+                Guid.NewGuid(),
+                2.3m
+            );
 
             ratingPersisterService.Add(givenRating);
         }

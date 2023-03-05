@@ -1,5 +1,4 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
-using GoRatings.Services;
 using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingPersister.Exceptions;
@@ -15,19 +14,27 @@ namespace GoRatings.Api.Controllers;
 [Route("[controller]")]
 public class RatingsController : ControllerBase
 {
+    private readonly IGivenRatingFactory givenRatingFactory;
+    private readonly IConsideredRatingFactory consideredRatingFactory;
+
     private readonly IRatingPersisterService ratingPersisterService;
     private readonly IRatingCalculationService ratingCalculationService;
+
     private readonly ICachingService<Guid, OverallRatingResponse> cachingService;
     private readonly ILogger<RatingsController> log;
     private readonly IHostApplicationLifetime hostApplicationLifetime;
 
     public RatingsController(
+        IGivenRatingFactory givenRatingFactory,
+        IConsideredRatingFactory consideredRatingFactory,
         IRatingPersisterService ratingPersisterService,
         IRatingCalculationService ratingCalculationService,
         ICachingService<Guid, OverallRatingResponse> cachingService,
         ILogger<RatingsController> log,
         IHostApplicationLifetime hostApplicationLifetime)
     {
+        this.givenRatingFactory = givenRatingFactory;
+        this.consideredRatingFactory = consideredRatingFactory;
         this.ratingPersisterService = ratingPersisterService;
         this.ratingCalculationService = ratingCalculationService;
         this.cachingService = cachingService;
@@ -50,7 +57,7 @@ public class RatingsController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
 
-        IGivenRating givenRating = request.ToGivenRating();
+        IGivenRating givenRating = request.ToGivenRating(givenRatingFactory);
 
         try
         {
@@ -110,7 +117,7 @@ public class RatingsController : ControllerBase
 
             var storedRatings = ratingPersisterService.GetWithinPastDays(entityUid, pastDays);
 
-            var consideredRatings = storedRatings.Select(sr => sr.ToConsideredRating());
+            var consideredRatings = storedRatings.Select(sr => sr.ToConsideredRating(consideredRatingFactory));
 
             var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, DateTime.UtcNow, pastDays);
 

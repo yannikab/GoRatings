@@ -12,15 +12,20 @@ namespace GoRatings.Api.Controllers;
 [Route("[controller]")]
 public class RealEstateAgentsController : ControllerBase
 {
+    private readonly IGivenRealEstateAgentFactory realEstateAgentFactory;
+
     private readonly IRealEstateAgentPersisterService persisterService;
+
     private readonly ILogger<RatingsController> log;
     private readonly IHostApplicationLifetime hostApplicationLifetime;
 
     public RealEstateAgentsController(
+        IGivenRealEstateAgentFactory realEstateAgentFactory,
         IRealEstateAgentPersisterService persisterService,
         ILogger<RatingsController> log,
         IHostApplicationLifetime hostApplicationLifetime)
     {
+        this.realEstateAgentFactory = realEstateAgentFactory;
         this.persisterService = persisterService;
         this.log = log;
         this.hostApplicationLifetime = hostApplicationLifetime;
@@ -41,7 +46,7 @@ public class RealEstateAgentsController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState.GetErrors());
 
-        IGivenRealEstateAgent givenRealEstateAgent = request.ToGivenRealEstateAgent();
+        IGivenRealEstateAgent givenRealEstateAgent = request.ToGivenRealEstateAgent(realEstateAgentFactory);
 
         try
         {
