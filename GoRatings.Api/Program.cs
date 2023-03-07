@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using GoRatings.Api;
@@ -7,22 +8,29 @@ using GoRatings.Api.Services.RatingsCleanup;
 using GoRatings.Services.Caching;
 using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.PropertyPersister;
+using GoRatings.Services.PropertyPersister.Exceptions;
 using GoRatings.Services.PropertyPersister.Interfaces;
 using GoRatings.Services.PropertyPersister.Models;
 using GoRatings.Services.RatingCalculation;
+using GoRatings.Services.RatingCalculation.Exceptions;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingCalculation.Models;
 using GoRatings.Services.RatingPersister;
+using GoRatings.Services.RatingPersister.Exceptions;
 using GoRatings.Services.RatingPersister.Interfaces;
 using GoRatings.Services.RatingPersister.Models;
 using GoRatings.Services.RatingsCleanup;
 using GoRatings.Services.RatingsCleanup.Interfaces;
 using GoRatings.Services.RealEstateAgentPersister;
+using GoRatings.Services.RealEstateAgentPersister.Exceptions;
 using GoRatings.Services.RealEstateAgentPersister.Interfaces;
 using GoRatings.Services.RealEstateAgentPersister.Models;
 
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.OpenApi.Models;
 
+using NLog;
 using NLog.Web;
 
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -87,6 +95,90 @@ builder.Services.AddHostedService<RatingsCleanupHostedService>();
 
 var app = builder.Build();
 
+app.UseExceptionHandler(configure =>
+{
+    configure.Run(async context =>
+    {
+        var exceptionHandler = context.Features.Get<IExceptionHandlerFeature>();
+
+        if (exceptionHandler == null)
+            return;
+
+        Exception exception = exceptionHandler.Error;
+
+        if (exception == null)
+            return;
+
+        ILogger<Program> log = context.RequestServices.GetService<ILogger<Program>>() ?? new NullLoggerFactory().CreateLogger<Program>();
+
+        int statusCode;
+        string message;
+
+        try
+        {
+            throw exception;
+        }
+        catch (Exception ex) when
+        (
+            ex is RatingValueInvalidException ||
+            ex is EntityDoesNotExistException ||
+            ex is EntityInvalidException ||
+            ex is EntityUidTypeMismatchException)
+        {
+            log.Info(ex);
+
+            statusCode = 400;
+            message = ex.Message;
+        }
+        catch (Exception ex) when
+        (
+            ex is PropertyDoesNotExistException ||
+            ex is RealEstateAgentDoesNotExistException)
+        {
+            log.Info(ex);
+
+            statusCode = 404;
+            message = ex.Message;
+        }
+        catch (Exception ex) when
+        (
+            ex is RatingCalculationException ||
+            ex is OverallRatingInvalidException)
+        {
+            log.Info(ex);
+
+            statusCode = 500;
+            message = "A rating calculation error has occurred.";
+        }
+        catch (Exception ex) when (!ex.IsCritical())
+        {
+            log.Error(ex);
+
+            statusCode = 500;
+            message = "An error has occurred.";
+        }
+        catch (Exception ex)
+        {
+            log.Critical(ex);
+
+            var hostApplicationLifetime = context.RequestServices.GetService<IHostApplicationLifetime>();
+
+            if (hostApplicationLifetime != null)
+                hostApplicationLifetime.StopApplication();
+
+            statusCode = 500;
+            message = "A fatal error has occurred.";
+        }
+
+        context.Response.StatusCode = statusCode;
+        context.Response.ContentType = "application/json; charset=utf-8";
+
+        var jsonResponse = JsonSerializer.Serialize(message);
+
+        await context.Response.WriteAsync(jsonResponse);
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -107,3 +199,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//Console.WriteLine("Done.");
+//Console.ReadKey();

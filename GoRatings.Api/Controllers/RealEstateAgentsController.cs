@@ -1,5 +1,4 @@
 ﻿using GoRatings.Api.Contracts.RealEstateAgents;
-using GoRatings.Services.RealEstateAgentPersister.Exceptions;
 using GoRatings.Services.RealEstateAgentPersister.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,21 +13,14 @@ public class RealEstateAgentsController : ControllerBase
 {
     private readonly IGivenRealEstateAgentFactory realEstateAgentFactory;
 
-    private readonly IRealEstateAgentPersisterService persisterService;
-
-    private readonly ILogger<RatingsController> log;
-    private readonly IHostApplicationLifetime hostApplicationLifetime;
+    private readonly IRealEstateAgentPersisterService realEstateAgentPersisterService;
 
     public RealEstateAgentsController(
         IGivenRealEstateAgentFactory realEstateAgentFactory,
-        IRealEstateAgentPersisterService persisterService,
-        ILogger<RatingsController> log,
-        IHostApplicationLifetime hostApplicationLifetime)
+        IRealEstateAgentPersisterService realEstateAgentPersisterService)
     {
         this.realEstateAgentFactory = realEstateAgentFactory;
-        this.persisterService = persisterService;
-        this.log = log;
-        this.hostApplicationLifetime = hostApplicationLifetime;
+        this.realEstateAgentPersisterService = realEstateAgentPersisterService;
     }
 
     [HttpPost]
@@ -48,28 +40,11 @@ public class RealEstateAgentsController : ControllerBase
 
         IGivenRealEstateAgent givenRealEstateAgent = request.ToGivenRealEstateAgent(realEstateAgentFactory);
 
-        try
-        {
-            var storedRealEstateAgent = await persisterService.AddAsync(givenRealEstateAgent);
+        var storedRealEstateAgent = await realEstateAgentPersisterService.AddAsync(givenRealEstateAgent);
 
-            var createRealEstateAgentResponse = storedRealEstateAgent.ToCreateRealEstateAgentResponse();
+        var createRealEstateAgentResponse = storedRealEstateAgent.ToCreateRealEstateAgentResponse();
 
-            return CreatedAtAction(nameof(GetRealEstateAgent), new { entityUid = createRealEstateAgentResponse.EntityUid }, createRealEstateAgentResponse);
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return CreatedAtAction(nameof(GetRealEstateAgent), new { entityUid = createRealEstateAgentResponse.EntityUid }, createRealEstateAgentResponse);
     }
 
     [HttpGet("{entityUid:guid}")]
@@ -83,32 +58,9 @@ public class RealEstateAgentsController : ControllerBase
     [SwaggerResponse(500, "An error has occurred.")]
     public async Task<IActionResult> GetRealEstateAgent([SwaggerParameter("The unique id of the real estate agent to be retrieved.", Required = true)] Guid entityUid)
     {
-        try
-        {
-            var storedRealEstateAgent = await persisterService.GetAsync(entityUid);
+        var storedRealEstateAgent = await realEstateAgentPersisterService.GetAsync(entityUid);
 
-            return Ok(storedRealEstateAgent.ToGetRealEstateAgentResponse());
-        }
-        catch (RealEstateAgentDoesNotExistException ex)
-        {
-            log.Info(ex);
-
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return Ok(storedRealEstateAgent.ToGetRealEstateAgentResponse());
     }
 
     [HttpGet]
@@ -120,25 +72,8 @@ public class RealEstateAgentsController : ControllerBase
     [SwaggerResponse(500, "An error has occurred.")]
     public async Task<IActionResult> GetAllRealEstateAgents()
     {
-        try
-        {
-            var storedRealEstateAgents = await persisterService.GetAllAsync();
+        var storedRealEstateAgents = await realEstateAgentPersisterService.GetAllAsync();
 
-            return Ok(storedRealEstateAgents.Select(sp => sp.ToGetRealEstateAgentResponse()));
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return Ok(storedRealEstateAgents.Select(sp => sp.ToGetRealEstateAgentResponse()));
     }
 }

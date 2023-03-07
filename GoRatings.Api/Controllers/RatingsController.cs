@@ -1,7 +1,6 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
 using GoRatings.Services.Caching.Interfaces;
 using GoRatings.Services.RatingCalculation.Interfaces;
-using GoRatings.Services.RatingPersister.Exceptions;
 using GoRatings.Services.RatingPersister.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -21,25 +20,19 @@ public class RatingsController : ControllerBase
     private readonly IRatingCalculationService ratingCalculationService;
 
     private readonly ICachingService<Guid, OverallRatingResponse> cachingService;
-    private readonly ILogger<RatingsController> log;
-    private readonly IHostApplicationLifetime hostApplicationLifetime;
 
     public RatingsController(
         IGivenRatingFactory givenRatingFactory,
         IConsideredRatingFactory consideredRatingFactory,
         IRatingPersisterService ratingPersisterService,
         IRatingCalculationService ratingCalculationService,
-        ICachingService<Guid, OverallRatingResponse> cachingService,
-        ILogger<RatingsController> log,
-        IHostApplicationLifetime hostApplicationLifetime)
+        ICachingService<Guid, OverallRatingResponse> cachingService)
     {
         this.givenRatingFactory = givenRatingFactory;
         this.consideredRatingFactory = consideredRatingFactory;
         this.ratingPersisterService = ratingPersisterService;
         this.ratingCalculationService = ratingCalculationService;
         this.cachingService = cachingService;
-        this.log = log;
-        this.hostApplicationLifetime = hostApplicationLifetime;
     }
 
     [HttpPost]
@@ -59,40 +52,11 @@ public class RatingsController : ControllerBase
 
         IGivenRating givenRating = request.ToGivenRating(givenRatingFactory);
 
-        try
-        {
-            var storedRating = await ratingPersisterService.AddAsync(givenRating);
+        var storedRating = await ratingPersisterService.AddAsync(givenRating);
 
-            var createdRatingResponse = storedRating.ToCreateRatingResponse();
+        var createdRatingResponse = storedRating.ToCreateRatingResponse();
 
-            return CreatedAtAction(nameof(GetRating), new { entityUid = createdRatingResponse.EntityUid }, createdRatingResponse);
-        }
-        catch (Exception ex) when
-        (
-            ex is RatingValueInvalidException ||
-            ex is EntityDoesNotExistException ||
-            ex is EntityInvalidException ||
-            ex is EntityUidTypeMismatchException
-        )
-        {
-            log.Info(ex);
-
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return CreatedAtAction(nameof(GetRating), new { entityUid = createdRatingResponse.EntityUid }, createdRatingResponse);
     }
 
     [HttpGet("{entityUid:guid}")]
@@ -108,52 +72,24 @@ public class RatingsController : ControllerBase
     [SwaggerResponse(500, "An error has occurred.")]
     public async Task<IActionResult> GetRating([SwaggerParameter("The unique id of the entity for which the overall rating is calculated.", Required = true)] Guid entityUid)
     {
-        try
-        {
-            if (cachingService.TryGetValue(entityUid, out var cachedRatingResponse))
-                return Ok(cachedRatingResponse);
+        if (cachingService.TryGetValue(entityUid, out var cachedRatingResponse))
+            return Ok(cachedRatingResponse);
 
-            int pastDays = Settings.Instance.PastDays;
+        int pastDays = Settings.Instance.PastDays;
 
-            var storedRatings = await ratingPersisterService.GetWithinPastDaysAsync(entityUid, pastDays);
+        var storedRatings = await ratingPersisterService.GetWithinPastDaysAsync(entityUid, pastDays);
 
-            var consideredRatings = storedRatings.Select(sr => sr.ToConsideredRating(consideredRatingFactory));
+        var consideredRatings = storedRatings.Select(sr => sr.ToConsideredRating(consideredRatingFactory));
 
-            var overallRating = await ratingCalculationService.CalculateOverallRatingAsync(consideredRatings, DateTime.UtcNow, pastDays);
+        var overallRating = await ratingCalculationService.CalculateOverallRatingAsync(consideredRatings, DateTime.UtcNow, pastDays);
 
-            if (!(overallRating.ConsideredRatings > 0))
-                return NotFound(entityUid);
+        if (!(overallRating.ConsideredRatings > 0))
+            return NotFound(entityUid);
 
-            var overallRatingResponse = overallRating.ToOverallRatingResponse(entityUid);
+        var overallRatingResponse = overallRating.ToOverallRatingResponse(entityUid);
 
-            cachingService.Add(entityUid, overallRatingResponse);
+        cachingService.Add(entityUid, overallRatingResponse);
 
-            return Ok(overallRatingResponse);
-        }
-        catch (Exception ex) when
-        (
-            ex is RatingValueInvalidException ||
-            ex is EntityDoesNotExistException ||
-            ex is EntityInvalidException
-        )
-        {
-            log.Info(ex);
-
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return Ok(overallRatingResponse);
     }
 }

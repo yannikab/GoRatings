@@ -1,5 +1,4 @@
 ﻿using GoRatings.Api.Contracts.Properties;
-using GoRatings.Services.PropertyPersister.Exceptions;
 using GoRatings.Services.PropertyPersister.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,21 +13,14 @@ public class PropertiesController : ControllerBase
 {
     private readonly IGivenPropertyFactory givenPropertyFactory;
 
-    private readonly IPropertyPersisterService persisterService;
-
-    private readonly ILogger<RatingsController> log;
-    private readonly IHostApplicationLifetime hostApplicationLifetime;
+    private readonly IPropertyPersisterService propertyPersisterService;
 
     public PropertiesController(
         IGivenPropertyFactory givenPropertyFactory,
-        IPropertyPersisterService persisterService,
-        ILogger<RatingsController> log,
-        IHostApplicationLifetime hostApplicationLifetime)
+        IPropertyPersisterService propertyPersisterService)
     {
         this.givenPropertyFactory = givenPropertyFactory;
-        this.persisterService = persisterService;
-        this.log = log;
-        this.hostApplicationLifetime = hostApplicationLifetime;
+        this.propertyPersisterService = propertyPersisterService;
     }
 
     [HttpPost]
@@ -48,28 +40,11 @@ public class PropertiesController : ControllerBase
 
         IGivenProperty givenProperty = request.ToGivenProperty(givenPropertyFactory);
 
-        try
-        {
-            var storedProperty = await persisterService.AddAsync(givenProperty);
+        var storedProperty = await propertyPersisterService.AddAsync(givenProperty);
 
-            var createProperyResponse = storedProperty.ToCreatePropertyResponse();
+        var createProperyResponse = storedProperty.ToCreatePropertyResponse();
 
-            return CreatedAtAction(nameof(GetProperty), new { entityUid = createProperyResponse.EntityUid }, createProperyResponse);
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return CreatedAtAction(nameof(GetProperty), new { entityUid = createProperyResponse.EntityUid }, createProperyResponse);
     }
 
     [HttpGet("{entityUid:guid}")]
@@ -83,32 +58,9 @@ public class PropertiesController : ControllerBase
     [SwaggerResponse(500, "An error has occurred.")]
     public async Task<IActionResult> GetProperty([SwaggerParameter("The unique id of the property to be retrieved.", Required = true)] Guid entityUid)
     {
-        try
-        {
-            var storedProperty = await persisterService.GetAsync(entityUid);
+        var storedProperty = await propertyPersisterService.GetAsync(entityUid);
 
-            return Ok(storedProperty.ToGetPropertyResponse());
-        }
-        catch (PropertyDoesNotExistException ex)
-        {
-            log.Info(ex);
-
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return Ok(storedProperty.ToGetPropertyResponse());
     }
 
     [HttpGet]
@@ -120,25 +72,8 @@ public class PropertiesController : ControllerBase
     [SwaggerResponse(500, "An error has occurred.")]
     public async Task<IActionResult> GetAllProperties()
     {
-        try
-        {
-            var storedProperties = await persisterService.GetAllAsync();
+        var storedProperties = await propertyPersisterService.GetAllAsync();
 
-            return Ok(storedProperties.Select(sp => sp.ToGetPropertyResponse()));
-        }
-        catch (Exception ex) when (!ex.IsCritical())
-        {
-            log.Error(ex);
-
-            return StatusCode(500);
-        }
-        catch (Exception ex)
-        {
-            log.Critical(ex);
-
-            hostApplicationLifetime.StopApplication();
-
-            return StatusCode(500);
-        }
+        return Ok(storedProperties.Select(sp => sp.ToGetPropertyResponse()));
     }
 }
