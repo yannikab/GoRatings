@@ -1,6 +1,6 @@
 ﻿namespace GoRatings.Services.RatingCalculation.Exceptions;
 
-internal class OverallRatingInvalidException : Exception
+public class OverallRatingInvalidException : Exception
 {
     private readonly decimal invalidValue;
 

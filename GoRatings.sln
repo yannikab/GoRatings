@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.Api", "GoRatings.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.DataAccess", "GoRatings.DataAccess\GoRatings.DataAccess.csproj", "{40FA3599-F854-4381-BF88-5D47C0019343}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoRatings.Services", "GoRatings.Services\GoRatings.Services.csproj", "{A64EFED4-450A-4766-B18B-2B50CBC6B555}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.Services", "GoRatings.Services\GoRatings.Services.csproj", "{A64EFED4-450A-4766-B18B-2B50CBC6B555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoRatings.Services.Tests", "GoRatings.Services.Tests\GoRatings.Services.Tests.csproj", "{A99EFE1D-FB58-4CFF-B04A-20012AEC970D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRatings.Services.Tests", "GoRatings.Services.Tests\GoRatings.Services.Tests.csproj", "{A99EFE1D-FB58-4CFF-B04A-20012AEC970D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoRatings.Api.Tests", "GoRatings.Api.Tests\GoRatings.Api.Tests.csproj", "{99F65A17-5EF0-40C5-93F9-01533B18F321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A99EFE1D-FB58-4CFF-B04A-20012AEC970D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A99EFE1D-FB58-4CFF-B04A-20012AEC970D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A99EFE1D-FB58-4CFF-B04A-20012AEC970D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99F65A17-5EF0-40C5-93F9-01533B18F321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F65A17-5EF0-40C5-93F9-01533B18F321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F65A17-5EF0-40C5-93F9-01533B18F321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F65A17-5EF0-40C5-93F9-01533B18F321}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

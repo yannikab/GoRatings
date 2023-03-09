@@ -1,5 +1,6 @@
 ﻿using GoRatings.Api.Contracts.Ratings;
 using GoRatings.Services.Caching.Interfaces;
+using GoRatings.Services.RatingCalculation.Exceptions;
 using GoRatings.Services.RatingCalculation.Interfaces;
 using GoRatings.Services.RatingPersister.Exceptions;
 using GoRatings.Services.RatingPersister.Interfaces;
@@ -130,16 +131,21 @@ public class RatingsController : ControllerBase
 
             return Ok(overallRatingResponse);
         }
-        catch (Exception ex) when
-        (
-            ex is RatingValueInvalidException ||
-            ex is EntityDoesNotExistException ||
-            ex is EntityInvalidException
-        )
+        catch (EntityDoesNotExistException ex)
         {
             log.Info(ex);
 
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex) when
+        (
+            ex is RatingValueInvalidException ||
+            ex is RatingCalculationException ||
+            ex is EntityInvalidException)
+        {
+            log.Warn(ex);
+
+            return StatusCode(500);
         }
         catch (Exception ex) when (!ex.IsCritical())
         {
