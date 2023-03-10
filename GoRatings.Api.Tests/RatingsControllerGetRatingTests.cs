@@ -66,13 +66,13 @@ public class RatingsControllerGetRatingTests
         );
 
         var actionResult = ratingsController.GetRating(entityUid).GetAwaiter().GetResult();
-
         Assert.IsInstanceOfType(actionResult, typeof(OkObjectResult));
-        
-        var value = ((OkObjectResult)actionResult).Value ?? new OverallRatingResponse();
-        Assert.IsInstanceOfType(value, typeof(OverallRatingResponse));
-        
-        var overallRatingResponse = (OverallRatingResponse)value;
+
+        var okObjectResult = (OkObjectResult)actionResult;
+        Assert.IsNotNull(okObjectResult.Value);
+        Assert.IsInstanceOfType(okObjectResult.Value, typeof(OverallRatingResponse));
+
+        var overallRatingResponse = (OverallRatingResponse)okObjectResult.Value;
         Assert.AreEqual(entityUid, overallRatingResponse.EntityUid);
         Assert.AreEqual(consideredRatings, overallRatingResponse.ConsideredRatings);
         Assert.AreEqual(overallRating, overallRatingResponse.Rating);
@@ -102,12 +102,12 @@ public class RatingsControllerGetRatingTests
         );
 
         var actionResult = ratingsController.GetRating(entityUid).GetAwaiter().GetResult();
-
         Assert.IsInstanceOfType(actionResult, typeof(NotFoundObjectResult));
 
-        var value = ((NotFoundObjectResult)actionResult).Value ?? Guid.NewGuid();
-        Assert.IsInstanceOfType(value, typeof(Guid));
-        Assert.AreEqual(entityUid, (Guid)value);
+        var notFoundObjectResult = (NotFoundObjectResult)actionResult;
+        Assert.IsNotNull(notFoundObjectResult.Value);
+        Assert.IsInstanceOfType(notFoundObjectResult.Value, typeof(Guid));
+        Assert.AreEqual(entityUid, notFoundObjectResult.Value);
     }
 
     [TestMethod]
@@ -130,13 +130,12 @@ public class RatingsControllerGetRatingTests
         );
 
         var actionResult = ratingsController.GetRating(entityUid).GetAwaiter().GetResult();
-
         Assert.IsInstanceOfType(actionResult, typeof(BadRequestObjectResult));
 
-        var value = ((BadRequestObjectResult)actionResult).Value;
-        Assert.IsInstanceOfType(value, typeof(string));
-        Assert.IsNotNull(value);
-        Assert.IsTrue(((string)value).ToLower().Contains(entityUid.ToString().ToLower()));
+        var badRequestObjectResult = (BadRequestObjectResult)actionResult;
+        Assert.IsNotNull(badRequestObjectResult.Value);
+        Assert.IsInstanceOfType(badRequestObjectResult.Value, typeof(string));
+        Assert.IsTrue(((string)badRequestObjectResult.Value).ToLower().Contains(entityUid.ToString().ToLower()));
     }
 
     [TestMethod]
@@ -159,14 +158,17 @@ public class RatingsControllerGetRatingTests
         );
 
         var actionResult = ratingsController.GetRating(entityUid).GetAwaiter().GetResult();
-
         Assert.IsInstanceOfType(actionResult, typeof(StatusCodeResult));
-        Assert.AreEqual(HttpStatusCode.InternalServerError, (HttpStatusCode)((StatusCodeResult)actionResult).StatusCode);
+
+        var statusCodeResult = (StatusCodeResult)actionResult;
+        Assert.AreEqual(HttpStatusCode.InternalServerError, (HttpStatusCode)statusCodeResult.StatusCode);
     }
 
     [TestMethod]
     public void RatingCalculationExceptionReturnsInternalServerError()
     {
+        Guid entityUid = Guid.NewGuid();
+
         mockRatingCalculationService
             .Setup(rcs => rcs.CalculateOverallRatingAsync(Enumerable.Empty<IConsideredRating>(), It.IsAny<DateTime>(), It.IsAny<int>()))
             .Throws<RatingCalculationException>();
@@ -181,10 +183,11 @@ public class RatingsControllerGetRatingTests
             mockHostApplicationLifeTime.Object
         );
 
-        var actionResult = ratingsController.GetRating(Guid.NewGuid()).GetAwaiter().GetResult();
-
+        var actionResult = ratingsController.GetRating(entityUid).GetAwaiter().GetResult();
         Assert.IsInstanceOfType(actionResult, typeof(StatusCodeResult));
-        Assert.AreEqual(HttpStatusCode.InternalServerError, (HttpStatusCode)((StatusCodeResult)actionResult).StatusCode);
+
+        var statusCodeResult = (StatusCodeResult)actionResult;
+        Assert.AreEqual(HttpStatusCode.InternalServerError, (HttpStatusCode)statusCodeResult.StatusCode);
     }
 
     [TestMethod]
@@ -207,8 +210,9 @@ public class RatingsControllerGetRatingTests
         );
 
         var actionResult = ratingsController.GetRating(entityUid).GetAwaiter().GetResult();
-
         Assert.IsInstanceOfType(actionResult, typeof(StatusCodeResult));
-        Assert.AreEqual(HttpStatusCode.InternalServerError, (HttpStatusCode)((StatusCodeResult)actionResult).StatusCode);
+
+        var statusCodeResult = (StatusCodeResult)actionResult;
+        Assert.AreEqual(HttpStatusCode.InternalServerError, (HttpStatusCode)statusCodeResult.StatusCode);
     }
 }
