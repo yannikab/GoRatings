@@ -65,7 +65,7 @@ namespace GoRatings.Services.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(RatingValueInvalidException))]
+        [ExpectedException(typeof(GivenRatingValueInvalidException))]
         public void AddRatingWithInvalidValue()
         {
             var storedProperty = propertyPersisterService.GetAll().FirstOrDefault();

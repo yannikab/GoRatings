@@ -121,7 +121,8 @@ app.UseExceptionHandler(configure =>
         catch (Exception ex) when
         (
             ex is EntityDoesNotExistException ||
-            ex is EntityUidTypeMismatchException)
+            ex is EntityUidTypeMismatchException ||
+            ex is GivenRatingValueInvalidException)
         {
             log.Info(ex);
 
@@ -140,8 +141,8 @@ app.UseExceptionHandler(configure =>
         }
         catch (Exception ex) when
         (
-            ex is RatingValueInvalidException ||
-            ex is EntityInvalidException)
+            ex is EntityInvalidException ||
+            ex is StoredRatingValueInvalidException)
         {
             log.Warn(ex);
 
