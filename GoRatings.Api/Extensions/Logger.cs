@@ -21,7 +21,7 @@ public static partial class Extensions
         logger.LogInformation(message);
     }
 
-    public static void Warning<T>(this ILogger<T> logger, string message)
+    public static void Warn<T>(this ILogger<T> logger, string message)
     {
         logger.LogWarning(message);
     }
@@ -51,7 +51,7 @@ public static partial class Extensions
         logger.LogInformation(ex, string.Empty);
     }
 
-    public static void Warning<T>(this ILogger<T> logger, Exception ex)
+    public static void Warn<T>(this ILogger<T> logger, Exception ex)
     {
         logger.LogWarning(ex, string.Empty);
     }

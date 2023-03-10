@@ -120,9 +120,7 @@ app.UseExceptionHandler(configure =>
         }
         catch (Exception ex) when
         (
-            ex is RatingValueInvalidException ||
             ex is EntityDoesNotExistException ||
-            ex is EntityInvalidException ||
             ex is EntityUidTypeMismatchException)
         {
             log.Info(ex);
@@ -142,10 +140,20 @@ app.UseExceptionHandler(configure =>
         }
         catch (Exception ex) when
         (
+            ex is RatingValueInvalidException ||
+            ex is EntityInvalidException)
+        {
+            log.Warn(ex);
+
+            statusCode = 500;
+            message = "A rating persister error has occurred.";
+        }
+        catch (Exception ex) when
+        (
             ex is RatingCalculationException ||
             ex is OverallRatingInvalidException)
         {
-            log.Info(ex);
+            log.Warn(ex);
 
             statusCode = 500;
             message = "A rating calculation error has occurred.";

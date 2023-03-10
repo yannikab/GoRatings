@@ -1,91 +1,91 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Interface Name="GoRatings.Services.PropertyPersister.Interfaces.IGivenProperty">
-    <Position X="1" Y="0.5" Width="1.5" />
+    <Position X="3.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAIAgIAAIAAAgAAAAAAAAAAADAAAABAAAAAA=</HashCode>
       <FileName>PropertyPersister\Interfaces\Models\IGivenProperty.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.PropertyPersister.Interfaces.IStoredProperty">
-    <Position X="1" Y="5.5" Width="1.5" />
+    <Position X="3.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PropertyPersister\Interfaces\Models\IStoredProperty.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RealEstateAgentPersister.Interfaces.IGivenRealEstateAgent">
-    <Position X="3" Y="0.5" Width="2" />
+    <Position X="5.25" Y="0.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAACAgAAAAAAAgEAAAAAAAQAAAAAAAIAAAAAg=</HashCode>
       <FileName>RealEstateAgentPersister\Interfaces\Models\IGivenRealEstateAgent.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RealEstateAgentPersister.Interfaces.IStoredRealEstateAgent">
-    <Position X="3" Y="5.5" Width="2" />
+    <Position X="5.25" Y="5.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AABAAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RealEstateAgentPersister\Interfaces\Models\IStoredRealEstateAgent.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RatingPersister.Interfaces.IGivenRating">
-    <Position X="5.5" Y="0.5" Width="1.5" />
+    <Position X="7.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAAAIAAAAAAAAAgAAAAAQAAAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>RatingPersister\Interfaces\Models\IGivenRating.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RatingPersister.Interfaces.IStoredRating">
-    <Position X="5.5" Y="5.5" Width="1.5" />
+    <Position X="7.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RatingPersister\Interfaces\Models\IStoredRating.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.PropertyPersister.Interfaces.IPropertyPersisterService" Collapsed="true">
-    <Position X="0.5" Y="8.25" Width="2" />
+    <Position X="2.75" Y="8.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAMAAAAAAAAAAABAAAAAAAEAAAAAAAAAAgAAIAAAAAA=</HashCode>
       <FileName>PropertyPersister\Interfaces\IPropertyPersisterService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RealEstateAgentPersister.Interfaces.IRealEstateAgentPersisterService" Collapsed="true">
-    <Position X="2.75" Y="8.25" Width="2.5" />
+    <Position X="5" Y="8.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAMAAAAAAAAAAABAAAAAAAEAAAAAAAAAAgAAIAAAAAA=</HashCode>
       <FileName>RealEstateAgentPersister\Interfaces\IRealEstateAgentPersisterService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RatingPersister.Interfaces.IRatingPersisterService" Collapsed="true">
-    <Position X="5.5" Y="8.25" Width="2" />
+    <Position X="7.75" Y="8.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AEIAACAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RatingPersister\Interfaces\IRatingPersisterService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RatingCalculation.Interfaces.IConsideredRating">
-    <Position X="8.25" Y="5.5" Width="2" />
+    <Position X="10.5" Y="5.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAQAAAAAgAAAAAAAAgAAAAAAAQAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>RatingCalculation\Interfaces\Models\IConsideredRating.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RatingCalculation.Interfaces.IRatingCalculationService">
-    <Position X="8.25" Y="3.25" Width="2" />
+    <Position X="10.5" Y="3.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAgAAAA=</HashCode>
       <FileName>RatingCalculation\Interfaces\IRatingCalculationService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.RatingCalculation.Interfaces.IOverallRating">
-    <Position X="8.25" Y="0.5" Width="2" />
+    <Position X="10.5" Y="0.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAEAIAAAABAAAAA=</HashCode>
       <FileName>RatingCalculation\Interfaces\Models\IOverallRating.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GoRatings.Services.Caching.Interfaces.ICachingService&lt;K, V&gt;">
-    <Position X="11.25" Y="3.25" Width="2" />
+    <Position X="13.5" Y="3.5" Width="2" />
     <TypeIdentifier>
       <HashCode>CAIAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Caching\Interfaces\ICachingService.cs</FileName>

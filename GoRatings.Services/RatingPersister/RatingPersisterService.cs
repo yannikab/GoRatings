@@ -45,6 +45,8 @@ public class RatingPersisterService : IRatingPersisterService
         if (entity == Entity.None)
             throw new EntityDoesNotExistException(entityUid);
 
+        entity.GetEntityType();
+
         if (!entity.IsActive)
             return Enumerable.Empty<IStoredRating>();
 
@@ -71,6 +73,9 @@ public class RatingPersisterService : IRatingPersisterService
         if (entity == Entity.None)
             throw new EntityDoesNotExistException(givenRating.EntityUid);
 
+        if (entity.GetEntityType() != givenRating.EntityType)
+            throw new EntityUidTypeMismatchException(givenRating.EntityUid, givenRating.EntityType);
+
         var rating = givenRating.ToRating(entity.Id);
 
         await uow.Ratings.AddAsync(rating);
@@ -93,6 +98,8 @@ public class RatingPersisterService : IRatingPersisterService
 
         if (entity == Entity.None)
             throw new EntityDoesNotExistException(entityUid);
+
+        entity.GetEntityType();
 
         if (!entity.IsActive)
             return Enumerable.Empty<IStoredRating>();
