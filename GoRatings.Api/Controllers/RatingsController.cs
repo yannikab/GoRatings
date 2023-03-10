@@ -70,15 +70,22 @@ public class RatingsController : ControllerBase
         }
         catch (Exception ex) when
         (
-            ex is RatingValueInvalidException ||
             ex is EntityDoesNotExistException ||
-            ex is EntityInvalidException ||
-            ex is EntityUidTypeMismatchException
-        )
+            ex is EntityUidTypeMismatchException ||
+            ex is GivenRatingValueInvalidException)
         {
             log.Info(ex);
 
             return BadRequest(ex.Message);
+        }
+        catch (Exception ex) when
+        (
+            ex is EntityInvalidException ||
+            ex is StoredRatingValueInvalidException)
+        {
+            log.Warn(ex);
+
+            return StatusCode(500);
         }
         catch (Exception ex) when (!ex.IsCritical())
         {
@@ -139,9 +146,9 @@ public class RatingsController : ControllerBase
         }
         catch (Exception ex) when
         (
-            ex is RatingValueInvalidException ||
-            ex is RatingCalculationException ||
-            ex is EntityInvalidException)
+            ex is EntityInvalidException ||
+            ex is StoredRatingValueInvalidException ||
+            ex is RatingCalculationException)
         {
             log.Warn(ex);
 

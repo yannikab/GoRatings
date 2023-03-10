@@ -10,7 +10,7 @@ public class RatingPersisterService : IRatingPersisterService
     public IStoredRating Add(IGivenRating givenRating)
     {
         if (!givenRating.IsValid())
-            throw new RatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
+            throw new GivenRatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
 
         using var uow = new GoRatingsUnitOfWork();
 
@@ -31,7 +31,7 @@ public class RatingPersisterService : IRatingPersisterService
         var storedRating = rating.ToStoredRating();
 
         if (!storedRating.IsValid())
-            throw new RatingValueInvalidException(storedRating.EntityUid, storedRating.Rating);
+            throw new StoredRatingValueInvalidException(storedRating.EntityUid, storedRating.Rating);
 
         return storedRating;
     }
@@ -56,7 +56,7 @@ public class RatingPersisterService : IRatingPersisterService
 
         foreach (var sr in storedRatings)
             if (!sr.IsValid())
-                throw new RatingValueInvalidException(sr.EntityUid, sr.Rating);
+                throw new StoredRatingValueInvalidException(sr.EntityUid, sr.Rating);
 
         return storedRatings;
     }
@@ -64,7 +64,7 @@ public class RatingPersisterService : IRatingPersisterService
     public async Task<IStoredRating> AddAsync(IGivenRating givenRating)
     {
         if (!givenRating.IsValid())
-            throw new RatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
+            throw new GivenRatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
 
         using var uow = new GoRatingsUnitOfWork();
 
@@ -85,7 +85,7 @@ public class RatingPersisterService : IRatingPersisterService
         var storedRating = rating.ToStoredRating();
 
         if (!storedRating.IsValid())
-            throw new RatingValueInvalidException(storedRating.EntityUid, storedRating.Rating);
+            throw new StoredRatingValueInvalidException(storedRating.EntityUid, storedRating.Rating);
 
         return storedRating;
     }
@@ -110,7 +110,7 @@ public class RatingPersisterService : IRatingPersisterService
 
         foreach (var sr in storedRatings)
             if (!sr.IsValid())
-                throw new RatingValueInvalidException(sr.EntityUid, sr.Rating);
+                throw new StoredRatingValueInvalidException(sr.EntityUid, sr.Rating);
 
         return storedRatings;
     }

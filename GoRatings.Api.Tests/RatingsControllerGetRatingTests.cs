@@ -35,8 +35,6 @@ public class RatingsControllerGetRatingTests
     readonly ILogger<RatingsController> logger = new NullLoggerFactory().CreateLogger<RatingsController>();
     readonly Mock<IHostApplicationLifetime> mockHostApplicationLifeTime = new Mock<IHostApplicationLifetime>();
 
-
-
     [TestMethod]
     public void ValidOverallRatingReturnsOk()
     {
@@ -142,13 +140,13 @@ public class RatingsControllerGetRatingTests
     }
 
     [TestMethod]
-    public void RatingValueInvalidExceptionReturnsInternalServerError()
+    public void StoredRatingValueInvalidExceptionReturnsInternalServerError()
     {
         Guid entityUid = Guid.NewGuid();
 
         mockRatingPersisterService
             .Setup(rps => rps.GetWithinPastDaysAsync(entityUid, It.IsAny<int>()))
-            .Throws(() => new RatingValueInvalidException(entityUid, 3.3m));
+            .Throws(() => new StoredRatingValueInvalidException(entityUid, 3.3m));
 
         RatingsController ratingsController = new RatingsController(
             givenRatingFactory,
