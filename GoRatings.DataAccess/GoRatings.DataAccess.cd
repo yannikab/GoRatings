@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GoRatings.DataAccess.Repository.Repository&lt;D, E, K&gt;">
+    <Position X="8" Y="8.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AQMAAAAACAAQAABAAAAABAEACAAIAAAAAgAAIIAEAAA=</HashCode>
+      <FileName>Repository\Repository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GoRatings.DataAccess.Repository.RepositoryEntity">
+    <Position X="6.75" Y="13" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repository\RepositoryEntity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GoRatings.DataAccess.Repository.RepositoryProperty">
+    <Position X="12.25" Y="13" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAABAAAAAAAAACAAIAAAAAoAAIAAAAAA=</HashCode>
+      <FileName>Repository\RepositoryProperty.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GoRatings.DataAccess.Repository.RepositoryRating">
+    <Position X="3.75" Y="13" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAEgAIAAAAAAAAA=</HashCode>
+      <FileName>Repository\RepositoryRating.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GoRatings.DataAccess.Repository.RepositoryRealEstateAgent">
+    <Position X="9.25" Y="13" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAABAAAAAAAAACAAIAAAAAoAAIAAAAAA=</HashCode>
+      <FileName>Repository\RepositoryRealEstateAgent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="GoRatings.DataAccess.Repository.IRepository&lt;D, E, K&gt;">
+    <Position X="8" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAMAAAAACAAAAABAAAAABAEACAAIAAAAAgAAIIAEAAA=</HashCode>
+      <FileName>Repository\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GoRatings.DataAccess.Repository.IRepositoryEntity">
+    <Position X="5.5" Y="5.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repository\IRepositoryEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GoRatings.DataAccess.Repository.IRepositoryProperty">
+    <Position X="13" Y="5.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repository\IRepositoryProperty.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GoRatings.DataAccess.Repository.IRepositoryRating">
+    <Position X="2" Y="5.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Repository\IRepositoryRating.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GoRatings.DataAccess.Repository.IRepositoryRealEstateAgent">
+    <Position X="9" Y="5.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repository\IRepositoryRealEstateAgent.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
