@@ -20,12 +20,12 @@ public class RepositoryRealEstateAgent : Repository<GoRatingsContext, RealEstate
 
     private IQueryable<RealEstateAgent> All
     {
-        get { return dbc.Set<RealEstateAgent>().Include(p => p.Entity); }
+        get { return dbc.Set<RealEstateAgent>().Include(rea => rea.Entity); }
     }
 
     public override RealEstateAgent Get(long id)
     {
-        return All.FirstOrDefault(p => p.Id == id) ?? RealEstateAgent.None;
+        return All.FirstOrDefault(rea => rea.Id == id) ?? RealEstateAgent.None;
     }
 
     public override IEnumerable<RealEstateAgent> GetAll()
@@ -40,7 +40,7 @@ public class RepositoryRealEstateAgent : Repository<GoRatingsContext, RealEstate
 
     public override async Task<RealEstateAgent> GetAsync(long id)
     {
-        return await All.FirstOrDefaultAsync(p => p.Id == id) ?? RealEstateAgent.None;
+        return await All.FirstOrDefaultAsync(rea => rea.Id == id) ?? RealEstateAgent.None;
     }
 
     public override async Task<IEnumerable<RealEstateAgent>> GetAllAsync()

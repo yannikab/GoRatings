@@ -9,7 +9,7 @@ public class RealEstateAgentPersisterService : IRealEstateAgentPersisterService
 {
     public IStoredRealEstateAgent Add(IGivenRealEstateAgent givenRealEstateAgent)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var realEstateAgent = givenRealEstateAgent.ToRealEstateAgent();
 
@@ -22,7 +22,7 @@ public class RealEstateAgentPersisterService : IRealEstateAgentPersisterService
 
     public IStoredRealEstateAgent Get(Guid entityUid)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = uow.Entities.GetByUid(entityUid);
 
@@ -39,7 +39,7 @@ public class RealEstateAgentPersisterService : IRealEstateAgentPersisterService
 
     public IEnumerable<IStoredRealEstateAgent> GetAll()
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var realEstateAgents = uow.RealEstateAgents.GetAll();
 
@@ -48,7 +48,7 @@ public class RealEstateAgentPersisterService : IRealEstateAgentPersisterService
 
     public async Task<IStoredRealEstateAgent> AddAsync(IGivenRealEstateAgent givenRealEstateAgent)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var realEstateAgent = givenRealEstateAgent.ToRealEstateAgent();
 
@@ -61,14 +61,14 @@ public class RealEstateAgentPersisterService : IRealEstateAgentPersisterService
 
     public async Task<IStoredRealEstateAgent> GetAsync(Guid entityUid)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = await uow.Entities.GetByUidAsync(entityUid);
 
         if (entity == Entity.None)
             throw new RealEstateAgentDoesNotExistException(entityUid);
 
-        uow.LoadReference(entity, e => e.RealEstateAgent);
+        await uow.LoadReferenceAsync(entity, e => e.RealEstateAgent);
 
         if (entity.RealEstateAgent == null)
             throw new RealEstateAgentDoesNotExistException(entityUid);
@@ -78,7 +78,7 @@ public class RealEstateAgentPersisterService : IRealEstateAgentPersisterService
 
     public async Task<IEnumerable<IStoredRealEstateAgent>> GetAllAsync()
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var realEstateAgents = await uow.RealEstateAgents.GetAllAsync();
 

@@ -9,7 +9,7 @@ public class PropertyPersisterService : IPropertyPersisterService
 {
     public IStoredProperty Add(IGivenProperty givenProperty)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var property = givenProperty.ToProperty();
 
@@ -22,7 +22,7 @@ public class PropertyPersisterService : IPropertyPersisterService
 
     public IStoredProperty Get(Guid entityUid)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = uow.Entities.GetByUid(entityUid);
 
@@ -48,7 +48,7 @@ public class PropertyPersisterService : IPropertyPersisterService
 
     public async Task<IStoredProperty> AddAsync(IGivenProperty givenProperty)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var property = givenProperty.ToProperty();
 
@@ -61,14 +61,14 @@ public class PropertyPersisterService : IPropertyPersisterService
 
     public async Task<IStoredProperty> GetAsync(Guid entityUid)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = await uow.Entities.GetByUidAsync(entityUid);
 
         if (entity == Entity.None)
             throw new PropertyDoesNotExistException(entityUid);
 
-        uow.LoadReference(entity, e => e.Property);
+        await uow.LoadReferenceAsync(entity, e => e.Property);
 
         if (entity.Property == null)
             throw new PropertyDoesNotExistException(entityUid);
@@ -78,7 +78,7 @@ public class PropertyPersisterService : IPropertyPersisterService
 
     public async Task<IEnumerable<IStoredProperty>> GetAllAsync()
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var properties = await uow.Properties.GetAllAsync();
 

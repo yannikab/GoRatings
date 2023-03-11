@@ -12,7 +12,7 @@ public class RatingPersisterService : IRatingPersisterService
         if (!givenRating.IsValid())
             throw new GivenRatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
 
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = uow.Entities.GetByUid(givenRating.EntityUid);
 
@@ -38,7 +38,7 @@ public class RatingPersisterService : IRatingPersisterService
 
     public IEnumerable<IStoredRating> GetWithinPastDays(Guid entityUid, int pastDays)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = uow.Entities.GetByUid(entityUid);
 
@@ -66,7 +66,7 @@ public class RatingPersisterService : IRatingPersisterService
         if (!givenRating.IsValid())
             throw new GivenRatingValueInvalidException(givenRating.EntityUid, givenRating.Rating);
 
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = await uow.Entities.GetByUidAsync(givenRating.EntityUid);
 
@@ -92,7 +92,7 @@ public class RatingPersisterService : IRatingPersisterService
 
     public async Task<IEnumerable<IStoredRating>> GetWithinPastDaysAsync(Guid entityUid, int pastDays)
     {
-        using var uow = new GoRatingsUnitOfWork();
+        using IGoRatingsUnitOfWork uow = new GoRatingsUnitOfWork();
 
         var entity = await uow.Entities.GetByUidAsync(entityUid);
 
