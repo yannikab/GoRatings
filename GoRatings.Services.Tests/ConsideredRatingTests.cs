@@ -7,19 +7,21 @@ namespace GoRatings.Services.Tests
     [TestClass]
     public class ConsideredRatingTests
     {
+        private readonly IConsideredRatingFactory consideredRatingFactory;
+
         public ConsideredRatingTests()
         {
+            consideredRatingFactory = new ConsideredRatingFactory();
         }
 
         [TestMethod]
         public void ValidNewRating()
         {
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = DateTime.UtcNow,
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                DateTime.UtcNow,
+                false
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
         }
@@ -27,12 +29,11 @@ namespace GoRatings.Services.Tests
         [TestMethod]
         public void InvalidRatingValue()
         {
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 1.3m,
-                CreatedDT = DateTime.UtcNow,
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                1.3m,
+                DateTime.UtcNow,
+                false
+            );
 
             Assert.IsFalse(consideredRating.IsValid());
         }
@@ -44,12 +45,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(1),
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(1),
+                false
+            );
 
             decimal _ = consideredRating.EffectiveRating(referenceDT, windowDays);
         }
@@ -60,12 +60,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT,
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT,
+                false
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(100m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -77,12 +76,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(-windowDays / 2),
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(-windowDays / 2),
+                false
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(50m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -94,12 +92,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(-windowDays),
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(-windowDays),
+                false
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -111,12 +108,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(-2 * windowDays),
-                IsAnonymous = false,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(-2 * windowDays),
+                false
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -128,12 +124,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT,
-                IsAnonymous = true,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT,
+                true
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(10m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -145,12 +140,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(-windowDays / 2),
-                IsAnonymous = true,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(-windowDays / 2),
+                true
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(5m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -162,12 +156,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(-windowDays),
-                IsAnonymous = true,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(-windowDays),
+                true
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));
@@ -179,12 +172,11 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            IConsideredRating consideredRating = new ConsideredRating()
-            {
-                Rating = 5.0m,
-                CreatedDT = referenceDT.AddDays(-2 * windowDays),
-                IsAnonymous = true,
-            };
+            IConsideredRating consideredRating = consideredRatingFactory.CreateConsideredRating(
+                5.0m,
+                referenceDT.AddDays(-2 * windowDays),
+                true
+            );
 
             Assert.IsTrue(consideredRating.IsValid());
             Assert.AreEqual(0m, consideredRating.EffectiveRating(referenceDT, windowDays));

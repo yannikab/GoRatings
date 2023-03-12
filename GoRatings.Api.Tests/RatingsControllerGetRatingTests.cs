@@ -28,6 +28,7 @@ public class RatingsControllerGetRatingTests
 {
     readonly IGivenRatingFactory givenRatingFactory = new GivenRatingFactory();
     readonly IConsideredRatingFactory consideredRatingFactory = new ConsideredRatingFactory();
+    readonly IOverallRatingFactory overallRatingFactory = new OverallRatingFactory();
 
     readonly Mock<IRatingPersisterService> mockRatingPersisterService = new Mock<IRatingPersisterService>();
     readonly Mock<IRatingCalculationService> mockRatingCalculationService = new Mock<IRatingCalculationService>();
@@ -48,12 +49,7 @@ public class RatingsControllerGetRatingTests
 
         mockRatingCalculationService
             .Setup(rcs => rcs.CalculateOverallRatingAsync(Enumerable.Empty<IConsideredRating>(), It.IsAny<DateTime>(), It.IsAny<int>()))
-            .Returns(Task.FromResult((IOverallRating)new OverallRating
-            {
-                CalculatedDT = DateTime.UtcNow,
-                ConsideredRatings = consideredRatings,
-                Rating = overallRating
-            }));
+            .Returns(Task.FromResult(overallRatingFactory.CreateOverallRating(DateTime.UtcNow, consideredRatings, overallRating)));
 
         RatingsController ratingsController = new RatingsController(
             givenRatingFactory,
@@ -89,7 +85,7 @@ public class RatingsControllerGetRatingTests
 
         mockRatingCalculationService
             .Setup(rcs => rcs.CalculateOverallRatingAsync(Enumerable.Empty<IConsideredRating>(), It.IsAny<DateTime>(), It.IsAny<int>()))
-            .Returns(Task.FromResult((IOverallRating)new OverallRating { CalculatedDT = DateTime.UtcNow, ConsideredRatings = 0, Rating = 0 }));
+            .Returns(Task.FromResult(overallRatingFactory.CreateOverallRating(DateTime.UtcNow, 0, 0m)));
 
         RatingsController ratingsController = new RatingsController(
             givenRatingFactory,

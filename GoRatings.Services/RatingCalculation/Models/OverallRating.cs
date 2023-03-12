@@ -2,7 +2,7 @@
 
 namespace GoRatings.Services.RatingCalculation.Models;
 
-public class OverallRating : IOverallRating
+internal class OverallRating : IOverallRating
 {
     public DateTime CalculatedDT { get; set; }
     public int ConsideredRatings { get; set; }
