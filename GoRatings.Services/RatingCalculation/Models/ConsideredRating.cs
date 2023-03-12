@@ -3,7 +3,7 @@ using GoRatings.Services.RatingCalculation.Interfaces;
 
 namespace GoRatings.Services.RatingCalculation.Models;
 
-public class ConsideredRating : IConsideredRating
+internal class ConsideredRating : IConsideredRating
 {
     public decimal Rating { get; set; }
     public DateTime CreatedDT { get; set; }

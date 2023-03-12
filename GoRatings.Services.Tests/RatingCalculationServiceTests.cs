@@ -10,11 +10,15 @@ namespace GoRatings.Services.Tests
     [TestClass]
     public class RatingCalculationServiceTests
     {
+        private readonly IConsideredRatingFactory consideredRatingFactory;
+
         private readonly IRatingCalculationService ratingCalculationService;
         private readonly IRepositoryRating repositoryRating;
 
         public RatingCalculationServiceTests()
         {
+            consideredRatingFactory = new ConsideredRatingFactory();
+
             ratingCalculationService = new RatingCalculationService();
             repositoryRating = new RepositoryRating(new GoRatingsContext());
         }
@@ -22,13 +26,11 @@ namespace GoRatings.Services.Tests
         [TestMethod]
         public void CalculateAllRatingsCurrentlyInStore()
         {
-            var consideredRatings = repositoryRating.GetAll().Select(r => new ConsideredRating()
-            {
-                Rating = r.Value,
-                CreatedDT = r.CreatedDt,
-                IsAnonymous = !r.Rater.HasValue,
-
-            }).ToList();
+            var consideredRatings = repositoryRating.GetAll().Select(r => consideredRatingFactory.CreateConsideredRating(
+                r.Value,
+                r.CreatedDt,
+                !r.Rater.HasValue
+            )).ToList();
 
             DateTime referenceDT = DateTime.UtcNow;
 
@@ -51,8 +53,8 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            var consideredRatings = new ConsideredRating[] {
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT, IsAnonymous = false }
+            var consideredRatings = new IConsideredRating[] {
+                 consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT, false)
             };
 
             ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, -windowDays);
@@ -65,8 +67,8 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            var consideredRatings = new ConsideredRating[] {
-                new ConsideredRating() { Rating = 1.2m, CreatedDT = referenceDT, IsAnonymous = false }
+            var consideredRatings = new IConsideredRating[] {
+                consideredRatingFactory.CreateConsideredRating(1.2m, referenceDT, false)
             };
 
             ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, windowDays);
@@ -79,8 +81,8 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            var consideredRatings = new ConsideredRating[] {
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT.AddDays(1), IsAnonymous = false }
+            var consideredRatings = new IConsideredRating[] {
+                consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT.AddDays(1), false)
             };
 
             ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, windowDays);
@@ -92,12 +94,12 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            var consideredRatings = new ConsideredRating[] {
-                new ConsideredRating() { Rating = 0.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 0.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 0.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 0.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 0.0m, CreatedDT = referenceDT, IsAnonymous = false }
+            var consideredRatings = new IConsideredRating[] {
+                consideredRatingFactory.CreateConsideredRating(0.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(0.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(0.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(0.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(0.0m, referenceDT, false),
             };
 
             var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, windowDays);
@@ -111,12 +113,12 @@ namespace GoRatings.Services.Tests
             DateTime referenceDT = DateTime.UtcNow;
             int windowDays = 10;
 
-            var consideredRatings = new ConsideredRating[] {
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT, IsAnonymous = false },
-                new ConsideredRating() { Rating = 5.0m, CreatedDT = referenceDT, IsAnonymous = false }
+            var consideredRatings = new IConsideredRating[] {
+                consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT, false),
+                consideredRatingFactory.CreateConsideredRating(5.0m, referenceDT, false),
             };
 
             var overallRating = ratingCalculationService.CalculateOverallRating(consideredRatings, referenceDT, windowDays);

@@ -8,8 +8,11 @@ namespace GoRatings.Services.Tests
     [TestClass]
     public class CachingTests
     {
+        private readonly IOverallRatingFactory overallRatingFactory;
+
         public CachingTests()
         {
+            overallRatingFactory = new OverallRatingFactory();
         }
 
         [TestMethod]
@@ -18,7 +21,7 @@ namespace GoRatings.Services.Tests
             ICachingService<Guid, IOverallRating>? cachingService =
                 new MemoryCachingService<Guid, IOverallRating>(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(30));
 
-            IOverallRating cached = new OverallRating() { CalculatedDT = DateTime.UtcNow, ConsideredRatings = 10, Rating = 5 };
+            IOverallRating cached = overallRatingFactory.CreateOverallRating(DateTime.UtcNow, 10, 5.0m);
 
             Guid uid = Guid.NewGuid();
 
@@ -40,7 +43,7 @@ namespace GoRatings.Services.Tests
             ICachingService<Guid, IOverallRating> cachingService =
                 new MemoryCachingService<Guid, IOverallRating>(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(30));
 
-            IOverallRating cached = new OverallRating() { CalculatedDT = DateTime.UtcNow, ConsideredRatings = 10, Rating = 5 };
+            IOverallRating cached = overallRatingFactory.CreateOverallRating(DateTime.UtcNow, 10, 5.0m);
 
             Guid uid = Guid.NewGuid();
 
@@ -68,7 +71,7 @@ namespace GoRatings.Services.Tests
             ICachingService<Guid, IOverallRating> cachingService =
                 new MemoryCachingService<Guid, IOverallRating>(TimeSpan.FromMilliseconds(1), TimeSpan.FromSeconds(30));
 
-            IOverallRating cached = new OverallRating() { CalculatedDT = DateTime.UtcNow, ConsideredRatings = 10, Rating = 5 };
+            IOverallRating cached = overallRatingFactory.CreateOverallRating(DateTime.UtcNow, 10, 5.0m);
 
             Guid uid = Guid.NewGuid();
 
@@ -87,7 +90,7 @@ namespace GoRatings.Services.Tests
             ICachingService<Guid?, IOverallRating> cachingService =
                 new MemoryCachingService<Guid?, IOverallRating>(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(30));
 
-            IOverallRating cached = new OverallRating() { CalculatedDT = DateTime.UtcNow, ConsideredRatings = 10, Rating = 5 };
+            IOverallRating cached = overallRatingFactory.CreateOverallRating(DateTime.UtcNow, 10, 5.0m);
 
             Guid? uid = null;
 
@@ -100,7 +103,7 @@ namespace GoRatings.Services.Tests
             ICachingService<Guid, IOverallRating> cachingService =
                 new MemoryCachingService<Guid, IOverallRating>(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
 
-            IOverallRating cached = new OverallRating() { CalculatedDT = DateTime.UtcNow, ConsideredRatings = 10, Rating = 5 };
+            IOverallRating cached = overallRatingFactory.CreateOverallRating(DateTime.UtcNow, 10, 5.0m);
 
             Guid uid = Guid.NewGuid();
 
